@@ -9,12 +9,25 @@ public class PlayerMovement : MonoBehaviour
     public string moveDirection = "none";
     public float tileSize;
     public float animationSpeed = 0.01f;
+    public bool isEncamped = true;
     public GameController gameController; //Set by the GameController itself
-    
+    GameObject encampBoard;
+
+    void Start()
+    {
+        encampBoard = GameObject.Find("EncampedBoard");
+    }
     // Update is called once per frame
     void Update()
     {
-        if (!readyToMove)
+        if (!readyToMove && Input.GetKeyDown(KeyCode.Space))
+        {
+            moveDirection = "encamp";
+            readyToMove = true;
+        }
+
+
+        if (!readyToMove && isEncamped == false)
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
@@ -46,56 +59,79 @@ public class PlayerMovement : MonoBehaviour
 
     public void ExecuteMove()
     {
-        //Find target position
-        float targetPositionX;
-        float targetPositionY;
-        if (moveDirection == "up")
+        if (moveDirection == "encamp")
         {
-            targetPositionY = transform.position.y + tileSize;
-            targetPositionX = transform.position.x;
-
-            while (targetPositionY > transform.position.y)
-            {
-                transform.position = new Vector2(transform.position.x, transform.position.y + animationSpeed);
-                AnimationDelay();
-            }
+            ToggleEncampment();
         }
-        else if (moveDirection == "down")
+        else
         {
-            targetPositionY = transform.position.y - tileSize;
-            targetPositionX = transform.position.x;
-
-            while (targetPositionY < transform.position.y)
+            //Find target position
+            float targetPositionX;
+            float targetPositionY;
+            if (moveDirection == "up")
             {
-                transform.position = new Vector2(transform.position.x, transform.position.y - animationSpeed);
-                AnimationDelay();
+                targetPositionY = transform.position.y + tileSize;
+                targetPositionX = transform.position.x;
+
+                while (targetPositionY > transform.position.y)
+                {
+                    transform.position = new Vector2(transform.position.x, transform.position.y + animationSpeed);
+                    AnimationDelay();
+                }
             }
-        }
-        else if (moveDirection == "left")
-        {
-            targetPositionY = transform.position.y;
-            targetPositionX = transform.position.x - tileSize;
-
-            while (targetPositionX < transform.position.x)
+            else if (moveDirection == "down")
             {
-                transform.position = new Vector2(transform.position.x - animationSpeed, transform.position.y);
-                AnimationDelay();
+                targetPositionY = transform.position.y - tileSize;
+                targetPositionX = transform.position.x;
+
+                while (targetPositionY < transform.position.y)
+                {
+                    transform.position = new Vector2(transform.position.x, transform.position.y - animationSpeed);
+                    AnimationDelay();
+                }
             }
-        }
-        else if (moveDirection == "right")
-        {
-            targetPositionY = transform.position.y;
-            targetPositionX = transform.position.x + tileSize;
-
-            while (targetPositionX > transform.position.x)
+            else if (moveDirection == "left")
             {
-                transform.position = new Vector2(transform.position.x + animationSpeed, transform.position.y);
-                AnimationDelay();
+                targetPositionY = transform.position.y;
+                targetPositionX = transform.position.x - tileSize;
+
+                while (targetPositionX < transform.position.x)
+                {
+                    transform.position = new Vector2(transform.position.x - animationSpeed, transform.position.y);
+                    AnimationDelay();
+                }
+            }
+            else if (moveDirection == "right")
+            {
+                targetPositionY = transform.position.y;
+                targetPositionX = transform.position.x + tileSize;
+
+                while (targetPositionX > transform.position.x)
+                {
+                    transform.position = new Vector2(transform.position.x + animationSpeed, transform.position.y);
+                    AnimationDelay();
+                }
             }
         }
 
         moveDirection = "none";
         readyToMove = false;
+    }
+
+    void ToggleEncampment()
+    {
+        if (isEncamped)
+        {
+            isEncamped = false;
+            encampBoard.SetActive(false);
+            gameController.mode = "move";
+        }
+        else
+        {
+            isEncamped = true;
+            encampBoard.SetActive(true);
+            gameController.mode = "camp";
+        }
     }
 
     IEnumerator AnimationDelay()
