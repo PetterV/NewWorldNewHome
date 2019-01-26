@@ -68,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void ExecuteMove()
     {
-        if (isEncamped)
+        if (isEncamped && !(moveDirection == "encamp"))
         {
             encampmentManager.PerTurnSettlement(encampmentManager.settlingPerTurn);
         }
@@ -129,7 +129,11 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Drain food per turn
-        inventory.UseFood(inventory.foodPerTurn);
+        inventory.UseFoodPerRound(inventory.foodPerTurn);
+        if (isEncamped)
+        {
+            inventory.UseWoodPerRound(inventory.woodPerTurn);
+        }
 
         moveDirection = "none";
         readyToMove = false;

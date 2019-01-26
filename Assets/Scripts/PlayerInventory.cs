@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerInventory : MonoBehaviour
 {
     public int foodPerTurn = 1;
+    public int woodPerTurn = 1;
     public int maxInventory = 800;
     public int currentInventory;
     public int currentWood = 80;
@@ -20,12 +21,18 @@ public class PlayerInventory : MonoBehaviour
     public int startingPops = 500;
     public int currentPops = 500;
 
+    float woodUsageThreshold = 25f;
+
     InventoryPanel inventoryPanel;
+    EncampmentManager encampmentManager;
+    PlayerMovement playerMovement;
 
     // Start is called before the first frame update
     void Start()
     {
         inventoryPanel = GameObject.Find("InventoryPanel").GetComponent<InventoryPanel>();
+        encampmentManager = GameObject.Find("EncampmentManager").GetComponent<EncampmentManager>();
+        playerMovement = GetComponent<PlayerMovement>();
     }
 
     public void CalculateInventorySpace()
@@ -42,9 +49,22 @@ public class PlayerInventory : MonoBehaviour
         currentFood = currentFood - value;
         CalculateInventorySpace();
     }
+    public void UseFoodPerRound(int value)
+    {
+        int foodToConsume = CalcFoodPerTurn(value);
+        currentFood = currentFood - foodToConsume;
+        CalculateInventorySpace();
+    }
     public void UseWood(int value)
     {
         currentWood = currentWood - value;
+        CalculateInventorySpace();
+    }
+
+    public void UseWoodPerRound(int value)
+    {
+        int woodToConsume = CalcWoodPerTurn(value);
+        currentWood = currentWood - woodToConsume;
         CalculateInventorySpace();
     }
     public void UseTools(int value)
@@ -93,5 +113,32 @@ public class PlayerInventory : MonoBehaviour
     public void GainPops(int value)
     {
         currentPops += value;
+    }
+
+    public int CalcFoodPerTurn(int baseValue)
+    {
+        float popModifier = currentPops / 50;
+
+        int foodToConsume = Mathf.RoundToInt(baseValue * popModifier);
+
+        return foodToConsume;
+    }
+    
+    public int CalcWoodPerTurn(int baseValue)
+    {
+        int woodToConsume = 0;
+
+        if (encampmentManager)
+        {
+            if (encampmentManager.settledValue >= woodUsageThreshold)
+            {
+                float popModifier = currentPops / 100;
+                float settlementModifier = encampmentManager.settledValue / 200;
+
+                woodToConsume = Mathf.RoundToInt(baseValue * popModifier * settlementModifier);
+            }
+        }
+
+        return woodToConsume;
     }
 }
