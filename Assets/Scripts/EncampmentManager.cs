@@ -100,24 +100,32 @@ public class EncampmentManager : MonoBehaviour
         settledValue = 0f;
         currentSettledProgressDisplay = 0f;
         GameObject.Find("SettledPercentage").GetComponent<Text>().text = settledValue.ToString() + "%";
+        int popLoss = CalculatedPopLossOnBreakCamp(settledValue);
+        GameObject.Find("PredictedLossText").GetComponent<Text>().text = popLoss.ToString();
+        int popLossNextTurn = CalculatedPopLossOnBreakCamp(settledValue + settlingPerTurn);
+        GameObject.Find("PredictedLossNexTurnText").GetComponent<Text>().text = popLossNextTurn.ToString();
     }
 
     public void PerTurnSettlement(float value)
     {
         settledValue += value;
         GameObject.Find("SettledPercentage").GetComponent<Text>().text = settledValue.ToString() + "%";
+        int popLoss = CalculatedPopLossOnBreakCamp(settledValue);
+        int popLossNextTurn = CalculatedPopLossOnBreakCamp(settledValue + settlingPerTurn);
+        GameObject.Find("PredictedLossText").GetComponent<Text>().text = popLoss.ToString();
+        GameObject.Find("PredictedLossNexTurnText").GetComponent<Text>().text = popLossNextTurn.ToString();
     }
 
-    public int CalculatedPopLossOnBreakCamp()
+    public int CalculatedPopLossOnBreakCamp(float settledRating)
     {
-        float percentageToLose = settledValue * percentPopLossPerSettled;
+        float percentageToLose = settledRating * percentPopLossPerSettled;
         int popsToLose = Mathf.RoundToInt(playerInventory.currentPops * percentageToLose / 100);
         return popsToLose;
     }
 
     public void PopLossOnBreakCamp()
     {
-        int popsToLose = CalculatedPopLossOnBreakCamp();
+        int popsToLose = CalculatedPopLossOnBreakCamp(settledValue);
         playerInventory.LosePops(popsToLose);
     }
 }
