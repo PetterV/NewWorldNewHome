@@ -13,11 +13,13 @@ public class PlayerMovement : MonoBehaviour
     public GameController gameController; //Set by the GameController itself
     GameObject encampmentMenu;
     PlayerInventory inventory;
+    EncampmentManager encampmentManager;
 
     void Start()
     {
         inventory = GetComponent<PlayerInventory>();
         encampmentMenu = GameObject.Find("EncampmentMenu");
+        encampmentManager = GameObject.Find("EncampmentManager").GetComponent<EncampmentManager>();
     }
     // Update is called once per frame
     void Update()
@@ -128,6 +130,8 @@ public class PlayerMovement : MonoBehaviour
         if (isEncamped)
         {
             isEncamped = false;
+            encampmentManager.settledValue = 0f;
+            encampmentManager.currentSettledProgressDisplay = 0f;
             encampmentMenu.SetActive(false);
             gameController.mode = "move";
         }

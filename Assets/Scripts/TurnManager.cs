@@ -10,6 +10,7 @@ public class TurnManager : MonoBehaviour
     PlayerMovement playerMovement;
     TurnCounter turnCounter;
     InventoryPanel inventoryPanel;
+    EncampmentManager encampmentManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +18,7 @@ public class TurnManager : MonoBehaviour
         playerMovement = GameObject.Find("Player").GetComponent<PlayerMovement>();
         turnCounter = GameObject.Find("TurnCounter").GetComponent<TurnCounter>();
         inventoryPanel = GameObject.Find("InventoryPanel").GetComponent<InventoryPanel>();
+        encampmentManager = GameObject.Find("EncampmentManager").GetComponent<EncampmentManager>(); 
         //Turn setup goes here
     }
 
@@ -26,6 +28,10 @@ public class TurnManager : MonoBehaviour
         IncrementTurnCount();
         turnCounter.UpdateTurnCounter();
         playerMovement.ExecuteMove();
+        if (playerMovement.isEncamped)
+        {
+            encampmentManager.PerTurnSettlement(encampmentManager.settlingPerTurn);
+        }
         takingTurn = false;
     }
 
