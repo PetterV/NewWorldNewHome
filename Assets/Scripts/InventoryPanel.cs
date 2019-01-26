@@ -16,6 +16,9 @@ public class InventoryPanel : MonoBehaviour
     public Text toolsHeader;
     public Text currentTools;
     public Text toolSpace;
+    public Text currentPops;
+    public Text foodPerTurn;
+    public Text woodPerTurn;
     PlayerInventory playerInventory;
 
     public void Start()
@@ -33,9 +36,12 @@ public class InventoryPanel : MonoBehaviour
         currentInventory.text = playerInventory.currentInventory.ToString();
         currentFood.text = playerInventory.currentFood.ToString();
         foodSpace.text = "(" + playerInventory.foodSpace.ToString() + ")";
+        foodPerTurn.text = "Food per turn: -" + playerInventory.CalcFoodPerTurn(playerInventory.foodPerTurn).ToString();
         currentWood.text = playerInventory.currentWood.ToString();
         woodSpace.text = "(" + playerInventory.woodSpace.ToString() + ")";
+        woodPerTurn.text = "Wood per turn: -" + playerInventory.CalcWoodPerTurn(playerInventory.woodPerTurn).ToString();
         currentTools.text = playerInventory.currentTools.ToString();
         toolSpace.text = "(" + playerInventory.toolSpace.ToString() + ")";
+        currentPops.text = playerInventory.currentPops.ToString();
     }
 }
