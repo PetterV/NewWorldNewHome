@@ -53,15 +53,30 @@ public class PlayerInventory : MonoBehaviour
     {
         currentFood = currentFood + value;
         CalculateInventorySpace();
+        while (currentInventory > maxInventory)
+        {
+            currentFood = currentFood - 1;
+            CalculateInventorySpace();
+        }
     }
     public void GainWood(int value)
     {
         currentWood = currentWood + value;
         CalculateInventorySpace();
+        while (currentInventory > maxInventory)
+        {
+            currentWood = currentWood - 1;
+            CalculateInventorySpace();
+        }
     }
     public void GainTools(int value)
     {
         currentTools = currentTools + value;
         CalculateInventorySpace();
+        while (currentInventory > maxInventory)
+        {
+            currentTools = currentTools - 1;
+            CalculateInventorySpace();
+        }
     }
 }

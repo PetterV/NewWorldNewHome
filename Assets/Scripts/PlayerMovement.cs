@@ -11,13 +11,13 @@ public class PlayerMovement : MonoBehaviour
     public float animationSpeed = 0.01f;
     public bool isEncamped = true;
     public GameController gameController; //Set by the GameController itself
-    GameObject encampBoard;
+    GameObject encampmentMenu;
     PlayerInventory inventory;
 
     void Start()
     {
         inventory = GetComponent<PlayerInventory>();
-        encampBoard = GameObject.Find("EncampedBoard");
+        encampmentMenu = GameObject.Find("EncampmentMenu");
     }
     // Update is called once per frame
     void Update()
@@ -128,13 +128,13 @@ public class PlayerMovement : MonoBehaviour
         if (isEncamped)
         {
             isEncamped = false;
-            encampBoard.SetActive(false);
+            encampmentMenu.SetActive(false);
             gameController.mode = "move";
         }
         else
         {
             isEncamped = true;
-            encampBoard.SetActive(true);
+            encampmentMenu.SetActive(true);
             gameController.mode = "camp";
         }
     }
