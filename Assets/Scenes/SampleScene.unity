@@ -264,7 +264,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000012398, y: -109.4}
+  m_AnchoredPosition: {x: 0, y: -109.399994}
   m_SizeDelta: {x: -323.2, y: -264.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &275220542
@@ -477,6 +477,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420030}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -492,6 +493,20 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
+--- !u!114 &519420030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a86a8233d8e52ee49b0b7896848066a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dampTime: 0.15
+  target: {fileID: 1318269042}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -750,8 +765,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -16.03, y: -27.595}
-  m_SizeDelta: {x: 185.01, y: 55.19}
+  m_AnchoredPosition: {x: -15.49, y: -27.595}
+  m_SizeDelta: {x: 209.42, y: 55.19}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &632957372
 MonoBehaviour:
@@ -923,6 +938,7 @@ GameObject:
   - component: {fileID: 971342215}
   - component: {fileID: 971342217}
   - component: {fileID: 971342216}
+  - component: {fileID: 971342218}
   m_Layer: 5
   m_Name: InventoryPanel
   m_TagString: Untagged
@@ -988,6 +1004,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 971342214}
   m_CullTransparentMesh: 0
+--- !u!114 &971342218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971342214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c57836cc3e73fa4fab44c6fa2b558e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxInventory: {fileID: 17869670}
+  currentInventory: {fileID: 982044985}
+  foodHeader: {fileID: 1521651056}
+  currentFood: {fileID: 915878714}
+  foodSpace: {fileID: 1281522453}
+  woodHeader: {fileID: 632957372}
+  currentWood: {fileID: 1111508209}
+  woodSpace: {fileID: 1140297494}
+  toolsHeader: {fileID: 1144039089}
+  currentTools: {fileID: 1776605768}
+  toolSpace: {fileID: 1276070756}
 --- !u!1 &982044983
 GameObject:
   m_ObjectHideFlags: 0
@@ -1599,6 +1638,7 @@ GameObject:
   - component: {fileID: 1318269042}
   - component: {fileID: 1318269041}
   - component: {fileID: 1318269043}
+  - component: {fileID: 1318269044}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1687,6 +1727,30 @@ MonoBehaviour:
   animationSpeed: 0.01
   isEncamped: 1
   gameController: {fileID: 0}
+--- !u!114 &1318269044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318269040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 105481b6e4c284544bf4b9db33e0b018, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foodPerTurn: 1
+  maxInventory: 500
+  currentInventory: 0
+  currentWood: 50
+  currentFood: 100
+  currentTools: 80
+  woodSpace: 0
+  foodSpace: 0
+  toolSpace: 0
+  woodSize: 3
+  foodSize: 1
+  toolSize: 5
 --- !u!1 &1521651054
 GameObject:
   m_ObjectHideFlags: 0

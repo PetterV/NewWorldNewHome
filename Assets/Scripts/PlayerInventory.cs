@@ -48,4 +48,20 @@ public class PlayerInventory : MonoBehaviour
         currentTools = currentTools - value;
         CalculateInventorySpace();
     }
+
+    public void GainFood(int value)
+    {
+        currentFood = currentFood + value;
+        CalculateInventorySpace();
+    }
+    public void GainWood(int value)
+    {
+        currentWood = currentWood + value;
+        CalculateInventorySpace();
+    }
+    public void GainTools(int value)
+    {
+        currentTools = currentTools + value;
+        CalculateInventorySpace();
+    }
 }
