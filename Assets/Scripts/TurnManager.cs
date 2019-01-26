@@ -9,12 +9,14 @@ public class TurnManager : MonoBehaviour
     GameController gameController;
     PlayerMovement playerMovement;
     TurnCounter turnCounter;
+    InventoryPanel inventoryPanel;
     // Start is called before the first frame update
     void Start()
     {
         gameController = GameObject.Find("GameController").GetComponent<GameController>();
         playerMovement = GameObject.Find("Player").GetComponent<PlayerMovement>();
         turnCounter = GameObject.Find("TurnCounter").GetComponent<TurnCounter>();
+        inventoryPanel = GameObject.Find("InventoryPanel").GetComponent<InventoryPanel>();
         //Turn setup goes here
     }
 

@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour
         player.GetComponent<PlayerMovement>().tileSize = tileSize;
         player.GetComponent<PlayerMovement>().gameController = this;
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
+        GameObject.Find("InventoryPanel").GetComponent<InventoryPanel>().UpdateInventoryView();
     }
 
     // Update is called once per frame

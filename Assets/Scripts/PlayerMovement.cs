@@ -12,9 +12,11 @@ public class PlayerMovement : MonoBehaviour
     public bool isEncamped = true;
     public GameController gameController; //Set by the GameController itself
     GameObject encampBoard;
+    PlayerInventory inventory;
 
     void Start()
     {
+        inventory = GetComponent<PlayerInventory>();
         encampBoard = GameObject.Find("EncampedBoard");
     }
     // Update is called once per frame
@@ -113,6 +115,9 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+
+        //Drain food per turn
+        inventory.UseFood(inventory.foodPerTurn);
 
         moveDirection = "none";
         readyToMove = false;
