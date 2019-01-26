@@ -33,6 +33,7 @@ public class PlayerInventory : MonoBehaviour
         inventoryPanel = GameObject.Find("InventoryPanel").GetComponent<InventoryPanel>();
         encampmentManager = GameObject.Find("EncampmentManager").GetComponent<EncampmentManager>();
         playerMovement = GetComponent<PlayerMovement>();
+        CalculateInventorySpace();
     }
 
     public void CalculateInventorySpace()
@@ -89,6 +90,30 @@ public class PlayerInventory : MonoBehaviour
             CalculateInventorySpace();
         }
     }
+    public int CalcHuntGain(int baseValue)
+    {
+        //Currently basevalue times popmodifier + basevalue times toolmodifier
+        float popModifier = CalcFoodGainFromPops(baseValue);
+        float toolsModifier = CalcFoodGainFromTools(baseValue);
+
+        int foodToGain = Mathf.RoundToInt(baseValue * popModifier) + Mathf.RoundToInt(baseValue * toolsModifier);
+        
+        return foodToGain;
+    }
+    public int CalcFoodGainFromPops(int baseValue)
+    {
+        float popModifier = currentPops / 50;
+        int foodFromPops = Mathf.RoundToInt(baseValue * popModifier);
+
+        return foodFromPops;
+    }
+    public int CalcFoodGainFromTools(int baseValue)
+    {
+        float toolsModifier = currentTools / 10;
+        int foodFromTools = Mathf.RoundToInt(baseValue * toolsModifier);
+
+        return foodFromTools;
+    }
     public void GainWood(int value)
     {
         currentWood = currentWood + value;
@@ -99,6 +124,30 @@ public class PlayerInventory : MonoBehaviour
             CalculateInventorySpace();
         }
     }
+    public int CalcGatherGain(int baseValue)
+    {
+        //Currently basevalue times popmodifier + basevalue times toolmodifier
+        float popModifier = CalcWoodGainFromPops(baseValue);
+        float toolsModifier = CalcWoodGainFromTools(baseValue);
+
+        int foodToGain = Mathf.RoundToInt(baseValue * popModifier) + Mathf.RoundToInt(baseValue * toolsModifier);
+
+        return foodToGain;
+    }
+    public int CalcWoodGainFromPops(int baseValue)
+    {
+        float popModifier = currentPops / 50;
+        int woodFromPops = Mathf.RoundToInt(baseValue * popModifier);
+
+        return woodFromPops;
+    }
+    public int CalcWoodGainFromTools(int baseValue)
+    {
+        float toolsModifier = currentTools / 10;
+        int woodFromTools = Mathf.RoundToInt(baseValue * toolsModifier);
+
+        return woodFromTools;
+    }
     public void GainTools(int value)
     {
         currentTools = currentTools + value;
@@ -108,6 +157,23 @@ public class PlayerInventory : MonoBehaviour
             currentTools = currentTools - 1;
             CalculateInventorySpace();
         }
+    }
+    public int CalcCraftingGain(int baseValue)
+    {
+        //Currently basevalue times popmodifier
+        float popModifier = CalcToolsGainFromPops(baseValue);
+        float toolsModifier = CalcWoodGainFromTools(baseValue);
+
+        int foodToGain = Mathf.RoundToInt(baseValue * popModifier) + Mathf.RoundToInt(baseValue * toolsModifier);
+
+        return foodToGain;
+    }
+    public int CalcToolsGainFromPops(int baseValue)
+    {
+        float popModifier = currentPops / 50;
+        int woodFromPops = Mathf.RoundToInt(baseValue * popModifier);
+
+        return woodFromPops;
     }
 
     public void GainPops(int value)

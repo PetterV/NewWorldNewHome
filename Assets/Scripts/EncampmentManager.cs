@@ -42,8 +42,9 @@ public class EncampmentManager : MonoBehaviour
         if (!turnManager.takingTurn)
         {
             int foodToGather = r.Next(minHuntFood, maxHuntFood + 1);
-            playerInventory.GainFood(foodToGather);
+            int finalFoodGained = playerInventory.CalcHuntGain(foodToGather);
             playerInventory.UseTools(huntCost);
+            playerInventory.GainFood(finalFoodGained);
             turnManager.TakeTurn();
             //TODO: Show outcome somewhere on-screen
         }
@@ -53,8 +54,9 @@ public class EncampmentManager : MonoBehaviour
         if (!turnManager.takingTurn)
         {
             int woodToGather = r.Next(minGatherWood, maxGatherWood + 1);
-            playerInventory.GainWood(woodToGather);
+            int finalWoodGained = playerInventory.CalcGatherGain(woodToGather);
             playerInventory.UseTools(gatherCost);
+            playerInventory.GainWood(finalWoodGained);
             turnManager.TakeTurn();
             //TODO: Show outcome somewhere on-screen
         }
@@ -64,8 +66,8 @@ public class EncampmentManager : MonoBehaviour
         if (!turnManager.takingTurn)
         {
             int toolsToCraft = r.Next(minCraftingTools, maxCraftingTools + 1);
-            playerInventory.UseTools(craftingCost);
-            playerInventory.GainTools(toolsToCraft);
+            int finalToolsGained = playerInventory.CalcCraftingGain(toolsToCraft);
+            playerInventory.GainTools(finalToolsGained);
             turnManager.TakeTurn();
             //TODO: Show outcome somewhere on-screen
         }
