@@ -1280,7 +1280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turn: 0
   takingTurn: 0
-  turnExecutionTimer: 1
+  turnExecutionTimer: 0.25
   timer: 0
 --- !u!1 &313824137
 GameObject:

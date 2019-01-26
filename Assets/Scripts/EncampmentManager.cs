@@ -39,7 +39,7 @@ public class EncampmentManager : MonoBehaviour
 
     public void Hunt()
     {
-        if (turnManager.takingTurn)
+        if (!turnManager.takingTurn)
         {
             int foodToGather = r.Next(minHuntFood, maxHuntFood + 1);
             playerInventory.GainFood(foodToGather);
@@ -50,7 +50,7 @@ public class EncampmentManager : MonoBehaviour
     }
     public void Gather()
     {
-        if (turnManager.takingTurn)
+        if (!turnManager.takingTurn)
         {
             int woodToGather = r.Next(minGatherWood, maxGatherWood + 1);
             playerInventory.GainWood(woodToGather);
@@ -61,7 +61,7 @@ public class EncampmentManager : MonoBehaviour
     }
     public void Craft()
     {
-        if (turnManager.takingTurn)
+        if (!turnManager.takingTurn)
         {
             int toolsToCraft = r.Next(minCraftingTools, maxCraftingTools + 1);
             playerInventory.UseTools(craftingCost);
@@ -91,6 +91,13 @@ public class EncampmentManager : MonoBehaviour
                 progressBar.fillAmount = currentSettledProgressDisplay / 100f;
             }
         }
+    }
+
+    public void StartNewEncampment()
+    {
+        settledValue = 0f;
+        currentSettledProgressDisplay = 0f;
+        GameObject.Find("SettledPercentage").GetComponent<Text>().text = settledValue.ToString() + "%";
     }
 
     public void PerTurnSettlement(float value)

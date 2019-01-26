@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -24,40 +25,44 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!readyToMove && Input.GetKeyDown(KeyCode.Space))
+        if (!gameController.turnManager.takingTurn)
         {
-            moveDirection = "encamp";
-            readyToMove = true;
-        }
+            if (!readyToMove && Input.GetKeyDown(KeyCode.Space))
+            {
+                moveDirection = "encamp";
+                readyToMove = true;
+            }
 
 
-        if (!readyToMove && isEncamped == false)
-        {
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (!readyToMove && isEncamped == false)
             {
-                moveDirection = "up";
-                readyToMove = true;
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    moveDirection = "up";
+                    readyToMove = true;
+                }
+                if (Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    moveDirection = "right";
+                    readyToMove = true;
+                }
+                if (Input.GetKeyDown(KeyCode.LeftArrow))
+                {
+                    moveDirection = "left";
+                    readyToMove = true;
+                }
+                if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    moveDirection = "down";
+                    readyToMove = true;
+                }
             }
-            if(Input.GetKeyDown(KeyCode.RightArrow)){
-                moveDirection = "right";
-                readyToMove = true;
-            }
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                moveDirection = "left";
-                readyToMove = true;
-            }
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                moveDirection = "down";
-                readyToMove = true;
-            }
-        }
 
-        //If a direction has been set, and a turn is not already in progress, take the turn
-        if (readyToMove && !gameController.turnManager.takingTurn)
-        {
-            gameController.turnManager.TakeTurn();
+            //If a direction has been set, and a turn is not already in progress, take the turn
+            if (readyToMove)
+            {
+                gameController.turnManager.TakeTurn();
+            }
         }
     }
 
@@ -136,8 +141,6 @@ public class PlayerMovement : MonoBehaviour
         {
             isEncamped = false;
             encampmentManager.PopLossOnBreakCamp();
-            encampmentManager.settledValue = 0f;
-            encampmentManager.currentSettledProgressDisplay = 0f;
             encampmentMenu.SetActive(false);
             gameController.mode = "move";
         }
@@ -145,6 +148,7 @@ public class PlayerMovement : MonoBehaviour
         {
             isEncamped = true;
             encampmentMenu.SetActive(true);
+            encampmentManager.StartNewEncampment();
             gameController.mode = "camp";
         }
     }
