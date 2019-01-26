@@ -130,12 +130,14 @@ public class PlayerMovement : MonoBehaviour
             isEncamped = false;
             encampmentMenu.SetActive(false);
             gameController.mode = "move";
+            SFXManager.instance.PlayCampSFX(false);
         }
         else
         {
             isEncamped = true;
             encampmentMenu.SetActive(true);
             gameController.mode = "camp";
+            SFXManager.instance.PlayCampSFX(true);
         }
     }
 
