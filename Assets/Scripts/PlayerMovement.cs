@@ -147,6 +147,7 @@ public class PlayerMovement : MonoBehaviour
             encampmentManager.PopLossOnBreakCamp();
             encampmentMenu.SetActive(false);
             gameController.mode = "move";
+            SFXManager.instance.PlayCampSFX(false);
         }
         else
         {
@@ -154,6 +155,7 @@ public class PlayerMovement : MonoBehaviour
             encampmentMenu.SetActive(true);
             encampmentManager.StartNewEncampment();
             gameController.mode = "camp";
+            SFXManager.instance.PlayCampSFX(true);
         }
     }
 
