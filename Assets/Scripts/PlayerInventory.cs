@@ -17,7 +17,11 @@ public class PlayerInventory : MonoBehaviour
     public int foodSize = 1;
     public int toolSize = 5;
 
+    public int startingPops = 500;
+    public int currentPops = 500;
+
     InventoryPanel inventoryPanel;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,6 +53,12 @@ public class PlayerInventory : MonoBehaviour
         CalculateInventorySpace();
     }
 
+    public void LosePops(int value)
+    {
+        currentPops = currentPops - value;
+        inventoryPanel.UpdateInventoryView();
+    }
+
     public void GainFood(int value)
     {
         currentFood = currentFood + value;
@@ -78,5 +88,10 @@ public class PlayerInventory : MonoBehaviour
             currentTools = currentTools - 1;
             CalculateInventorySpace();
         }
+    }
+
+    public void GainPops(int value)
+    {
+        currentPops += value;
     }
 }

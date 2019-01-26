@@ -16,6 +16,7 @@ public class InventoryPanel : MonoBehaviour
     public Text toolsHeader;
     public Text currentTools;
     public Text toolSpace;
+    public Text currentPops;
     PlayerInventory playerInventory;
 
     public void Start()
@@ -37,5 +38,6 @@ public class InventoryPanel : MonoBehaviour
         woodSpace.text = "(" + playerInventory.woodSpace.ToString() + ")";
         currentTools.text = playerInventory.currentTools.ToString();
         toolSpace.text = "(" + playerInventory.toolSpace.ToString() + ")";
+        currentPops.text = playerInventory.currentPops.ToString();
     }
 }

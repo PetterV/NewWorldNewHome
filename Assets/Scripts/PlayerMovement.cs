@@ -63,6 +63,11 @@ public class PlayerMovement : MonoBehaviour
 
     public void ExecuteMove()
     {
+        if (isEncamped)
+        {
+            encampmentManager.PerTurnSettlement(encampmentManager.settlingPerTurn);
+        }
+
         if (moveDirection == "encamp")
         {
             ToggleEncampment();
@@ -130,6 +135,7 @@ public class PlayerMovement : MonoBehaviour
         if (isEncamped)
         {
             isEncamped = false;
+            encampmentManager.PopLossOnBreakCamp();
             encampmentManager.settledValue = 0f;
             encampmentManager.currentSettledProgressDisplay = 0f;
             encampmentMenu.SetActive(false);

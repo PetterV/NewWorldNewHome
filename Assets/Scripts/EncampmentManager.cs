@@ -15,6 +15,7 @@ public class EncampmentManager : MonoBehaviour
     public int huntCost = 1;
     public int gatherCost = 1;
     public int craftingCost = 1;
+    public float percentPopLossPerSettled = 0.5f;
     private float timer = 0.0f;
     public float settledValue = 0f;
     public float settlingPerTurn = 2f;
@@ -38,27 +39,36 @@ public class EncampmentManager : MonoBehaviour
 
     public void Hunt()
     {
-        int foodToGather = r.Next(minHuntFood, maxHuntFood + 1);
-        playerInventory.GainFood(foodToGather);
-        playerInventory.UseTools(huntCost);
-        turnManager.TakeTurn();
-        //TODO: Show outcome somewhere on-screen
+        if (turnManager.takingTurn)
+        {
+            int foodToGather = r.Next(minHuntFood, maxHuntFood + 1);
+            playerInventory.GainFood(foodToGather);
+            playerInventory.UseTools(huntCost);
+            turnManager.TakeTurn();
+            //TODO: Show outcome somewhere on-screen
+        }
     }
     public void Gather()
     {
-        int woodToGather = r.Next(minGatherWood, maxGatherWood + 1);
-        playerInventory.GainWood(woodToGather);
-        playerInventory.UseTools(gatherCost);
-        turnManager.TakeTurn();
-        //TODO: Show outcome somewhere on-screen
+        if (turnManager.takingTurn)
+        {
+            int woodToGather = r.Next(minGatherWood, maxGatherWood + 1);
+            playerInventory.GainWood(woodToGather);
+            playerInventory.UseTools(gatherCost);
+            turnManager.TakeTurn();
+            //TODO: Show outcome somewhere on-screen
+        }
     }
     public void Craft()
     {
-        int toolsToCraft = r.Next(minCraftingTools, maxCraftingTools + 1);
-        playerInventory.UseTools(craftingCost);
-        playerInventory.GainTools(toolsToCraft);
-        turnManager.TakeTurn();
-        //TODO: Show outcome somewhere on-screen
+        if (turnManager.takingTurn)
+        {
+            int toolsToCraft = r.Next(minCraftingTools, maxCraftingTools + 1);
+            playerInventory.UseTools(craftingCost);
+            playerInventory.GainTools(toolsToCraft);
+            turnManager.TakeTurn();
+            //TODO: Show outcome somewhere on-screen
+        }
     }
 
     void Update()
@@ -87,5 +97,18 @@ public class EncampmentManager : MonoBehaviour
     {
         settledValue += value;
         GameObject.Find("SettledPercentage").GetComponent<Text>().text = settledValue.ToString() + "%";
+    }
+
+    public int CalculatedPopLossOnBreakCamp()
+    {
+        float percentageToLose = settledValue * percentPopLossPerSettled;
+        int popsToLose = Mathf.RoundToInt(playerInventory.currentPops * percentageToLose / 100);
+        return popsToLose;
+    }
+
+    public void PopLossOnBreakCamp()
+    {
+        int popsToLose = CalculatedPopLossOnBreakCamp();
+        playerInventory.LosePops(popsToLose);
     }
 }

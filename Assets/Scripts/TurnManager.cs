@@ -6,6 +6,9 @@ public class TurnManager : MonoBehaviour
 {
     public int turn = 0;
     public bool takingTurn = false;
+    public float turnExecutionTimer = 1.0f;
+    public float timer = 0.0f;
+    bool wrappingUpTurn = false;
     GameController gameController;
     PlayerMovement playerMovement;
     TurnCounter turnCounter;
@@ -28,11 +31,24 @@ public class TurnManager : MonoBehaviour
         IncrementTurnCount();
         turnCounter.UpdateTurnCounter();
         playerMovement.ExecuteMove();
-        if (playerMovement.isEncamped)
+        timer = 0.0f;
+        wrappingUpTurn = true;
+    }
+
+    void Update()
+    {
+        if (wrappingUpTurn)
         {
-            encampmentManager.PerTurnSettlement(encampmentManager.settlingPerTurn);
+            if (turnExecutionTimer > timer)
+            {
+                timer += Time.deltaTime;
+            }
+            else
+            {
+                takingTurn = false;
+                wrappingUpTurn = false;
+            }
         }
-        takingTurn = false;
     }
 
     void IncrementTurnCount()
