@@ -29,9 +29,16 @@ public class SFXManager : MonoBehaviour
 		}	
 	}
 
-//	void Start () {
-//		source = gameObject.GetComponent<AudioSource>();
-//	}
+	void Start () {
+		// Play sounds...
+		if (resourceGatheredSFX[0] == null){ //Make sure sounds exist...
+			Debug.Log ("Missing SFX: Go to SFXManager and assign clip to GameStartEndSFX[0]");
+		}
+
+		int _source = 3;
+		source[_source].clip = gameStartEndSFX[0];
+		source[_source].Play();
+	}
 
 	// Uses source: 0
 	public void PlayResourceGatheredSFX (string _type) //, int _audioSource)
