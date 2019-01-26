@@ -4,24 +4,24 @@ using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
 {
-    public int foodPerTurn = 1;
-    public int woodPerTurn = 1;
-    public int maxInventory = 800;
-    public int currentInventory;
-    public int currentWood = 80;
-    public int currentFood = 100;
-    public int currentTools = 50;
-    public int woodSpace;
-    public int foodSpace;
-    public int toolSpace;
-    public int woodSize = 3;
-    public int foodSize = 1;
-    public int toolSize = 5;
+    public int foodPerTurn = 1; //Base value of food lost per turn when relevant (For Food it always is?)
+    public int woodPerTurn = 1; //Base value of wood lost per turn when relevant
+    public int maxInventory; //Max inventory size
+    public int currentInventory; //Current inventory size. When this is goes over maxInventory, resources will be lost
+    public int currentWood = 80; //Current amount of wood
+    public int currentFood = 100; //Current amount of Food
+    public int currentTools = 50; //Current amount of Tools
+    public int woodSpace; //Amount of inventory taken up by Wood - Calculated from woodSize and currentWood
+    public int foodSpace; //Amount of inventory taken up by Food - Calculated from foodSize and currentFood
+    public int toolSpace; //Amount of inventory taken up by Tools - Calculated from toolSize and currentTools
+    public int woodSize = 3; //Amount of inventory taken up by Wood per unit
+    public int foodSize = 1; //Amount of inventory taken up by Food per unit
+    public int toolSize = 5; //Amount of inventory taken up by Tools per unit
 
-    public int startingPops = 500;
-    public int currentPops = 500;
+    public int startingPops = 500; //Number of starting pops
+    public int currentPops; //Number of current pops
 
-    float woodUsageThreshold = 25f;
+    float woodUsageThreshold = 25f; //The threshold of the "Settled" value that will trigger wood-per-turn usage
 
     InventoryPanel inventoryPanel;
     EncampmentManager encampmentManager;
@@ -33,6 +33,8 @@ public class PlayerInventory : MonoBehaviour
         inventoryPanel = GameObject.Find("InventoryPanel").GetComponent<InventoryPanel>();
         encampmentManager = GameObject.Find("EncampmentManager").GetComponent<EncampmentManager>();
         playerMovement = GetComponent<PlayerMovement>();
+        currentPops = startingPops;
+        maxInventory = currentPops * 2;
         CalculateInventorySpace();
     }
 
@@ -41,6 +43,7 @@ public class PlayerInventory : MonoBehaviour
         woodSpace = currentWood * woodSize;
         foodSpace = currentFood * foodSize;
         toolSpace = currentTools * toolSize;
+        maxInventory = currentPops * 2;
         currentInventory = woodSpace + foodSpace + toolSpace;
         inventoryPanel.UpdateInventoryView();
     }
@@ -96,13 +99,13 @@ public class PlayerInventory : MonoBehaviour
         float popModifier = CalcFoodGainFromPops(baseValue);
         float toolsModifier = CalcFoodGainFromTools(baseValue);
 
-        int foodToGain = Mathf.RoundToInt(baseValue * popModifier) + Mathf.RoundToInt(baseValue * toolsModifier);
+        int foodToGain = Mathf.RoundToInt(popModifier) + Mathf.RoundToInt(toolsModifier);
         
         return foodToGain;
     }
     public int CalcFoodGainFromPops(int baseValue)
     {
-        float popModifier = currentPops / 50;
+        float popModifier = currentPops / 100;
         int foodFromPops = Mathf.RoundToInt(baseValue * popModifier);
 
         return foodFromPops;
@@ -130,13 +133,13 @@ public class PlayerInventory : MonoBehaviour
         float popModifier = CalcWoodGainFromPops(baseValue);
         float toolsModifier = CalcWoodGainFromTools(baseValue);
 
-        int foodToGain = Mathf.RoundToInt(baseValue * popModifier) + Mathf.RoundToInt(baseValue * toolsModifier);
+        int foodToGain = Mathf.RoundToInt(popModifier) + Mathf.RoundToInt(toolsModifier);
 
         return foodToGain;
     }
     public int CalcWoodGainFromPops(int baseValue)
     {
-        float popModifier = currentPops / 50;
+        float popModifier = currentPops / 100;
         int woodFromPops = Mathf.RoundToInt(baseValue * popModifier);
 
         return woodFromPops;
@@ -164,13 +167,13 @@ public class PlayerInventory : MonoBehaviour
         float popModifier = CalcToolsGainFromPops(baseValue);
         float toolsModifier = CalcWoodGainFromTools(baseValue);
 
-        int foodToGain = Mathf.RoundToInt(baseValue * popModifier) + Mathf.RoundToInt(baseValue * toolsModifier);
+        int foodToGain = Mathf.RoundToInt(popModifier) + Mathf.RoundToInt(toolsModifier);
 
         return foodToGain;
     }
     public int CalcToolsGainFromPops(int baseValue)
     {
-        float popModifier = currentPops / 50;
+        float popModifier = currentPops / 100;
         int woodFromPops = Mathf.RoundToInt(baseValue * popModifier);
 
         return woodFromPops;

@@ -31,6 +31,13 @@ public class TurnManager : MonoBehaviour
         IncrementTurnCount();
         turnCounter.UpdateTurnCounter();
         playerMovement.ExecuteMove();
+        if (playerMovement.isEncamped)
+        {
+            encampmentManager.SetPossibleGainValues();
+            GameObject.Find("HuntTooltipTrigger").GetComponent<DisplayTooltipHunt>().UpdateHuntTooltip();
+            GameObject.Find("GatherTooltipTrigger").GetComponent<DisplayGatherTooltip>().UpdateGatherTooltip();
+            GameObject.Find("CraftTooltipTrigger").GetComponent<DisplayCraftTooltip>().UpdateCraftTooltip();
+        }
         timer = 0.0f;
         wrappingUpTurn = true;
     }

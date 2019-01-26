@@ -6,21 +6,24 @@ using UnityEngine.UI;
 public class EncampmentManager : MonoBehaviour
 {
     System.Random r = new System.Random();
-    public int minHuntFood = 3;
-    public int maxHuntFood = 6;
-    public int minGatherWood = 2;
-    public int maxGatherWood = 5;
-    public int minCraftingTools = 2;
-    public int maxCraftingTools = 5;
-    public int huntCost = 1;
-    public int gatherCost = 1;
-    public int craftingCost = 1;
-    public float percentPopLossPerSettled = 0.5f;
-    private float timer = 0.0f;
+    public int minHuntFood = 3; //The minimum basevalue used for acquiring Food
+    public int maxHuntFood = 6; //The maximum basevalue used for acquiring Food
+    public int minGatherWood = 2; //The minimum basevalue used for acquiring Wood
+    public int maxGatherWood = 5; //The maximum basevalue used for acquiring Food
+    public int minCraftingTools = 2; //The minimum basevalue used for acquiring Tools
+    public int maxCraftingTools = 5; //The maximum basevalue used for acquiring Food
+    public int huntCost = 1; //The basevalue used for calculating the cost of hunting in Tools
+    public int gatherCost = 1; //The basevalue used for calculating the cost of gathering in Tools
+    
+    public float percentPopLossPerSettled = 0.5f; //0-1 value determining the percentage of the "Settled" value that is converted into population remaining at a given settlement 
     public float settledValue = 0f;
     public float settlingPerTurn = 2f;
-    public float currentSettledProgressDisplay = 0;
-    float settledProgressBarSpeed = 0.001f;
+
+    private float timer = 0.0f; //Timer used for the display of the Settled progress bar changing
+    public float currentSettledProgressDisplay = 0; //Value used to display the correct fillrate for the Settled progress bar
+    float settledProgressBarSpeed = 0.001f; //Used to determine the speed of the Settled progress bar filling
+
+    //Various script targets
     PlayerInventory playerInventory;
     TurnManager turnManager;
     Image progressBar;
@@ -35,6 +38,7 @@ public class EncampmentManager : MonoBehaviour
         progressBar = GameObject.Find("SettledProgressBar").GetComponent<Image>();
         playerMovement = GameObject.Find("Player").GetComponent<PlayerMovement>();
         PerTurnSettlement(0f);
+        SetPossibleGainValues();
     }
 
     public void Hunt()
@@ -104,6 +108,7 @@ public class EncampmentManager : MonoBehaviour
         GameObject.Find("PredictedLossText").GetComponent<Text>().text = popLoss.ToString();
         int popLossNextTurn = CalculatedPopLossOnBreakCamp(settledValue + settlingPerTurn);
         GameObject.Find("PredictedLossNexTurnText").GetComponent<Text>().text = popLossNextTurn.ToString();
+        SetPossibleHuntGain();
     }
 
     public void PerTurnSettlement(float value)
@@ -127,5 +132,35 @@ public class EncampmentManager : MonoBehaviour
     {
         int popsToLose = CalculatedPopLossOnBreakCamp(settledValue);
         playerInventory.LosePops(popsToLose);
+    }
+
+
+    //The "SetPossibleBlahGain" methods are to display correct info on the camp action buttons
+    public void SetPossibleHuntGain()
+    {
+        int minHuntGain = playerInventory.CalcHuntGain(minHuntFood);
+        int maxHuntGain = playerInventory.CalcHuntGain(maxHuntFood);
+
+        GameObject.Find("HuntPossibleGain").GetComponent<Text>().text = "+" + minHuntGain.ToString() + "-" + maxHuntGain.ToString();
+    }
+    public void SetPossibleGatherGain()
+    {
+        int minGatherGain = playerInventory.CalcGatherGain(minGatherWood);
+        int maxGatherGain = playerInventory.CalcGatherGain(maxGatherWood);
+
+        GameObject.Find("GatherPossibleGain").GetComponent<Text>().text = "+" + minGatherGain.ToString() + "-" + maxGatherGain.ToString();
+    }
+    public void SetPossibleToolsGain()
+    {
+        int minCraftGain = playerInventory.CalcCraftingGain(minCraftingTools);
+        int maxCraftGain = playerInventory.CalcCraftingGain(maxCraftingTools);
+
+        GameObject.Find("CraftPossibleGain").GetComponent<Text>().text = "+" + minCraftGain.ToString() + "-" + maxCraftGain.ToString();
+    }
+    public void SetPossibleGainValues()
+    {
+        SetPossibleHuntGain();
+        SetPossibleToolsGain();
+        SetPossibleGatherGain();
     }
 }
