@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Encounter
   - ResourceTile
+  - MoveBlocker
   layers:
   - Default
   - TransparentFX

@@ -15,12 +15,22 @@ public class PlayerMovement : MonoBehaviour
     GameObject encampmentMenu;
     PlayerInventory inventory;
     EncampmentManager encampmentManager;
+    public GameObject[] impassableAreas;
+    public GameObject NorthCollider;
+    public GameObject EastCollider;
+    public GameObject SouthCollider;
+    public GameObject WestCollider;
+    bool canMoveNorth;
+    bool canMoveEast;
+    bool canMoveSouth;
+    bool canMoveWest;
 
     void Start()
     {
         inventory = GetComponent<PlayerInventory>();
         encampmentMenu = GameObject.Find("EncampmentMenu");
         encampmentManager = GameObject.Find("EncampmentManager").GetComponent<EncampmentManager>();
+        impassableAreas = GameObject.FindGameObjectsWithTag("MoveBlocker");
     }
     // Update is called once per frame
     void Update()
@@ -38,23 +48,55 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.UpArrow))
                 {
-                    moveDirection = "up";
-                    readyToMove = true;
+                    isNorthClear();
+                    if (canMoveNorth)
+                    {
+                        moveDirection = "up";
+                        readyToMove = true;
+                    }
+                    else
+                    {
+                        Debug.Log("Something is blocking the way north!");
+                    }
                 }
                 if (Input.GetKeyDown(KeyCode.RightArrow))
                 {
-                    moveDirection = "right";
-                    readyToMove = true;
+                    isEastClear();
+                    if (canMoveEast)
+                    {
+                        moveDirection = "right";
+                        readyToMove = true;
+                    }
+                    else
+                    {
+                        Debug.Log("Something is blocking the way east!");
+                    }
                 }
                 if (Input.GetKeyDown(KeyCode.LeftArrow))
                 {
-                    moveDirection = "left";
-                    readyToMove = true;
+                    isWestClear();
+                    if (canMoveWest)
+                    {
+                        moveDirection = "left";
+                        readyToMove = true;
+                    }
+                    else
+                    {
+                        Debug.Log("Something is blocking the way east!");
+                    }
                 }
                 if (Input.GetKeyDown(KeyCode.DownArrow))
                 {
-                    moveDirection = "down";
-                    readyToMove = true;
+                    isSouthClear();
+                    if (canMoveSouth)
+                    {
+                        moveDirection = "down";
+                        readyToMove = true;
+                    }
+                    else
+                    {
+                        Debug.Log("Something is blocking the way east!");
+                    }
                 }
             }
 
@@ -62,6 +104,55 @@ public class PlayerMovement : MonoBehaviour
             if (readyToMove)
             {
                 gameController.turnManager.TakeTurn();
+            }
+        }
+    }
+
+    void isNorthClear()
+    {
+        Collider2D northCollider = NorthCollider.GetComponent<Collider2D>();
+        canMoveNorth = true;
+        foreach (GameObject moveBlocker in impassableAreas)
+        {
+            if (moveBlocker.GetComponent<Collider2D>().bounds.Intersects(northCollider.bounds))
+            {
+                canMoveNorth = false;
+            }
+        }
+    }
+    void isEastClear()
+    {
+        Collider2D eastCollider = EastCollider.GetComponent<Collider2D>();
+        canMoveEast = true;
+        foreach (GameObject moveBlocker in impassableAreas)
+        {
+            if (moveBlocker.GetComponent<Collider2D>().bounds.Intersects(eastCollider.bounds))
+            {
+                canMoveEast = false;
+            }
+        }
+    }
+    void isSouthClear()
+    {
+        Collider2D southCollider = SouthCollider.GetComponent<Collider2D>();
+        canMoveSouth = true;
+        foreach (GameObject moveBlocker in impassableAreas)
+        {
+            if (moveBlocker.GetComponent<Collider2D>().bounds.Intersects(southCollider.bounds))
+            {
+                canMoveSouth = false;
+            }
+        }
+    }
+    void isWestClear()
+    {
+        Collider2D westCollider = WestCollider.GetComponent<Collider2D>();
+        canMoveWest = true;
+        foreach (GameObject moveBlocker in impassableAreas)
+        {
+            if (moveBlocker.GetComponent<Collider2D>().bounds.Intersects(westCollider.bounds))
+            {
+                canMoveWest = false;
             }
         }
     }
