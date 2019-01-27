@@ -10,6 +10,7 @@ public class ValueChangeTooltip : MonoBehaviour
     public Color lossColor;
     public Color changeColor;
     public bool isFloatingText;
+    public GameObject toInstantiate;
     float floatSpeed = 0.01f;
     bool justActivated = false;
     Image I;
@@ -37,34 +38,35 @@ public class ValueChangeTooltip : MonoBehaviour
 
     public void Activate(int value, string change)
     {
-        SendTooltipNumber(value, change);
+        StartCoroutine(SendTooltipNumber(value, change));
     }
-    void SendTooltipNumber(int value, string change)
+    IEnumerator SendTooltipNumber(int value, string change)
     {
+        valueText.color = new Color(valueText.color.r, valueText.color.g, valueText.color.b, 0);
+        I.color = new Color(I.color.r, I.color.g, I.color.b, 0);
+        GameObject newText = Instantiate(toInstantiate, GameObject.Find("Canvas").transform);
+        ValueChangeTooltip newTextScript = newText.GetComponent<ValueChangeTooltip>();
+        newTextScript.StopAllCoroutines();
         if (change == "gain")
         {
-            valueText.color = gainColor;
-            valueText.text = "+" + value.ToString();
+            newTextScript.valueText.color = gainColor;
+            newTextScript.valueText.text = "+" + value.ToString();
         }
         else if (change == "loss")
         {
-            valueText.color = lossColor;
-            valueText.text = "-" + value.ToString();
+            newTextScript.valueText.color = lossColor;
+            newTextScript.valueText.text = "-" + value.ToString();
         }
         else
         {
-            valueText.color = changeColor;
-            valueText.text = value.ToString();
+            newTextScript.valueText.color = changeColor;
+            newTextScript.valueText.text = value.ToString();
         }
-        valueText.color = new Color(valueText.color.r, valueText.color.g, valueText.color.b, 0);
-        I.color = new Color(I.color.r, I.color.g, I.color.b, 0);
-        GameObject newText = Instantiate(gameObject, gameObject.transform, true);
-        ValueChangeTooltip newTextScript = newText.GetComponent<ValueChangeTooltip>();
-        newTextScript.StopAllCoroutines();
-        newTextScript.valueText.color = new Color(valueText.color.r, valueText.color.g, valueText.color.b, 0.9f);
+        newTextScript.valueText.color = new Color(newTextScript.valueText.color.r, newTextScript.valueText.color.g, newTextScript.valueText.color.b, 0.9f);
         newTextScript.isFloatingText = true;
         newTextScript.I.color = new Color(I.color.r, I.color.g, I.color.b, 0.8f);
         newTextScript.StartCoroutine(FadeEffect(newTextScript.gameObject.GetComponent<Image>(), newTextScript.valueText));
+        yield return null;
     }
 
     IEnumerator FadeEffect(Image I, Text t)

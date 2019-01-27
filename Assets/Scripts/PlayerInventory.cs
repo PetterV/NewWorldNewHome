@@ -205,7 +205,7 @@ public class PlayerInventory : MonoBehaviour
             value = value - 1;
             CalculateInventorySpace();
         }
-        if (value >= 0)
+        if (value > 0)
             toolsValueBox.GetComponent<ValueChangeTooltip>().Activate(value, "gain");
     }
     public int CalcCraftingGain(int baseValue)
