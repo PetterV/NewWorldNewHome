@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
     public TurnManager turnManager;
     public PlayerInventory playerInventory;
     public string mode;
+    public System.Random random = new System.Random();
     // Start is called before the first frame update
     void Start()
     {

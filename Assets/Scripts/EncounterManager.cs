@@ -39,7 +39,7 @@ public class EncounterManager : MonoBehaviour
 
     public void OptionEffect (GameObject effectValues)
     {
-        if (effectValues != null)
+        if (effectValues.GetComponent<OptionEffectValues>().resource != "")
         {
             string gainOrLose = effectValues.GetComponent<OptionEffectValues>().gainOrLose;
             string resource = effectValues.GetComponent<OptionEffectValues>().resource;

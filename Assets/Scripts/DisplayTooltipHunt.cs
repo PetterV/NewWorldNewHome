@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class DisplayTooltipHunt : MonoBehaviour
 {
     public GameObject tooltip;
+    public Text fromResources;
     public Text fromPops;
     public Text fromTools;
     EncampmentManager encampmentManager;
@@ -23,7 +24,10 @@ public class DisplayTooltipHunt : MonoBehaviour
         int maxFromPops = playerInventory.CalcFoodGainFromPops(encampmentManager.maxHuntFood);
         int minFromTools = playerInventory.CalcFoodGainFromTools(encampmentManager.minHuntFood);
         int maxFromTools = playerInventory.CalcFoodGainFromTools(encampmentManager.maxHuntFood);
+        int foodFromResources = playerInventory.CalcFoodGainFromResources(1);
         tooltip.SetActive(true);
+
+        fromResources.text = foodFromResources.ToString();
         fromPops.text = minFromPops.ToString() + "-" + maxFromPops.ToString();
         fromTools.text = minFromTools.ToString() + "-" + maxFromTools.ToString();
     }

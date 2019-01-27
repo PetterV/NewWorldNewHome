@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class DisplayGatherTooltip : MonoBehaviour
 {
     public GameObject tooltip;
+    public Text fromResources;
     public Text fromPops;
     public Text fromTools;
     EncampmentManager encampmentManager;
@@ -23,7 +24,9 @@ public class DisplayGatherTooltip : MonoBehaviour
         int maxFromPops = playerInventory.CalcWoodGainFromPops(encampmentManager.maxGatherWood);
         int minFromTools = playerInventory.CalcWoodGainFromTools(encampmentManager.minGatherWood);
         int maxFromTools = playerInventory.CalcWoodGainFromTools(encampmentManager.maxGatherWood);
+        int woodFromResources = playerInventory.CalcWoodGainFromResources(1);
         tooltip.SetActive(true);
+        fromResources.text = woodFromResources.ToString();
         fromPops.text = minFromPops.ToString() + "-" + maxFromPops.ToString();
         fromTools.text = minFromTools.ToString() + "-" + maxFromTools.ToString();
     }

@@ -93,13 +93,15 @@ public class PlayerInventory : MonoBehaviour
             CalculateInventorySpace();
         }
     }
+    //Food gain calculations
     public int CalcHuntGain(int baseValue)
     {
         //Currently basevalue times popmodifier + basevalue times toolmodifier
         float popModifier = CalcFoodGainFromPops(baseValue);
         float toolsModifier = CalcFoodGainFromTools(baseValue);
+        int foodFromResources = CalcFoodGainFromResources(1);
 
-        int foodToGain = Mathf.RoundToInt(popModifier) + Mathf.RoundToInt(toolsModifier);
+        int foodToGain = Mathf.RoundToInt(popModifier) + Mathf.RoundToInt(toolsModifier) + foodFromResources;
         
         return foodToGain;
     }
@@ -117,6 +119,13 @@ public class PlayerInventory : MonoBehaviour
 
         return foodFromTools;
     }
+    public int CalcFoodGainFromResources(int baseValue)
+    {
+        int foodResources = encampmentManager.huntFood;
+        return foodResources;
+    }
+    
+    //Wood gathering
     public void GainWood(int value)
     {
         currentWood = currentWood + value;
@@ -132,8 +141,9 @@ public class PlayerInventory : MonoBehaviour
         //Currently basevalue times popmodifier + basevalue times toolmodifier
         float popModifier = CalcWoodGainFromPops(baseValue);
         float toolsModifier = CalcWoodGainFromTools(baseValue);
+        int resourceGain = CalcWoodGainFromResources(1);
 
-        int foodToGain = Mathf.RoundToInt(popModifier) + Mathf.RoundToInt(toolsModifier);
+        int foodToGain = Mathf.RoundToInt(popModifier) + Mathf.RoundToInt(toolsModifier) + resourceGain;
 
         return foodToGain;
     }
@@ -151,6 +161,11 @@ public class PlayerInventory : MonoBehaviour
 
         return woodFromTools;
     }
+    public int CalcWoodGainFromResources(int baseValue)
+    {
+        int woodResources = encampmentManager.gatherWood;
+        return woodResources;
+    }
     public void GainTools(int value)
     {
         currentTools = currentTools + value;
@@ -166,17 +181,23 @@ public class PlayerInventory : MonoBehaviour
         //Currently basevalue times popmodifier
         float popModifier = CalcToolsGainFromPops(baseValue);
         float toolsModifier = CalcWoodGainFromTools(baseValue);
+        int resourceGain = CalcToolsGainFromResources(1);
 
-        int foodToGain = Mathf.RoundToInt(popModifier) + Mathf.RoundToInt(toolsModifier);
+        int foodToGain = Mathf.RoundToInt(popModifier) + Mathf.RoundToInt(toolsModifier) + resourceGain;
 
         return foodToGain;
     }
     public int CalcToolsGainFromPops(int baseValue)
     {
         float popModifier = currentPops / 100;
-        int woodFromPops = Mathf.RoundToInt(baseValue * popModifier);
+        int toolsFromPops = Mathf.RoundToInt(baseValue * popModifier);
 
-        return woodFromPops;
+        return toolsFromPops;
+    }
+    public int CalcToolsGainFromResources(int baseValue)
+    {
+        int toolsResources = encampmentManager.craftingTools;
+        return toolsResources;
     }
 
     public void GainPops(int value)

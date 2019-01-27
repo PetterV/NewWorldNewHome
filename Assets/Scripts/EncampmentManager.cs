@@ -5,13 +5,17 @@ using UnityEngine.UI;
 
 public class EncampmentManager : MonoBehaviour
 {
-    System.Random r = new System.Random();
     public int minHuntFood = 3; //The minimum basevalue used for acquiring Food
-    public int maxHuntFood = 6; //The maximum basevalue used for acquiring Food
+    public int maxHuntFood = 5; //The maximum basevalue used for acquiring Food
     public int minGatherWood = 2; //The minimum basevalue used for acquiring Wood
-    public int maxGatherWood = 5; //The maximum basevalue used for acquiring Food
-    public int minCraftingTools = 2; //The minimum basevalue used for acquiring Tools
-    public int maxCraftingTools = 5; //The maximum basevalue used for acquiring Food
+    public int maxGatherWood = 4; //The maximum basevalue used for acquiring Food
+    public int minCraftingTools = 1; //The minimum basevalue used for acquiring Tools
+    public int maxCraftingTools = 3; //The maximum basevalue used for acquiring Food
+
+    public int huntFood = 0;
+    public int gatherWood = 0;
+    public int craftingTools = 0;
+
     public int huntCost = 1; //The basevalue used for calculating the cost of hunting in Tools
     public int gatherCost = 1; //The basevalue used for calculating the cost of gathering in Tools
     
@@ -28,15 +32,20 @@ public class EncampmentManager : MonoBehaviour
     TurnManager turnManager;
     Image progressBar;
     PlayerMovement playerMovement;
+    GameController gameController;
+    ResourceTileManager resourceTileManager;
+    public List<GameObject> resourceTilesWithinRange;
     
 
     // Start is called before the first frame update
     void Start()
     {
+        gameController = GameObject.Find("GameController").GetComponent<GameController>();
         playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         progressBar = GameObject.Find("SettledProgressBar").GetComponent<Image>();
         playerMovement = GameObject.Find("Player").GetComponent<PlayerMovement>();
+        resourceTileManager = GameObject.Find("ResourceTileManager").GetComponent<ResourceTileManager>();
         PerTurnSettlement(0f);
         SetPossibleGainValues();
     }
@@ -45,7 +54,7 @@ public class EncampmentManager : MonoBehaviour
     {
         if (!turnManager.takingTurn)
         {
-            int foodToGather = r.Next(minHuntFood, maxHuntFood + 1);
+            int foodToGather = gameController.random.Next(minHuntFood, maxHuntFood + 1);
             int finalFoodGained = playerInventory.CalcHuntGain(foodToGather);
             playerInventory.UseTools(huntCost);
             playerInventory.GainFood(finalFoodGained);
@@ -57,7 +66,7 @@ public class EncampmentManager : MonoBehaviour
     {
         if (!turnManager.takingTurn)
         {
-            int woodToGather = r.Next(minGatherWood, maxGatherWood + 1);
+            int woodToGather = gameController.random.Next(minGatherWood, maxGatherWood + 1);
             int finalWoodGained = playerInventory.CalcGatherGain(woodToGather);
             playerInventory.UseTools(gatherCost);
             playerInventory.GainWood(finalWoodGained);
@@ -69,7 +78,7 @@ public class EncampmentManager : MonoBehaviour
     {
         if (!turnManager.takingTurn)
         {
-            int toolsToCraft = r.Next(minCraftingTools, maxCraftingTools + 1);
+            int toolsToCraft = gameController.random.Next(minCraftingTools, maxCraftingTools + 1);
             int finalToolsGained = playerInventory.CalcCraftingGain(toolsToCraft);
             playerInventory.GainTools(finalToolsGained);
             turnManager.TakeTurn();
@@ -102,6 +111,13 @@ public class EncampmentManager : MonoBehaviour
     public void StartNewEncampment()
     {
         settledValue = 0f;
+        //Determine all resources within range
+        resourceTileManager.FindResourceTilesWithinRange();
+        if (resourceTilesWithinRange.Count == 0)
+        {
+            Debug.Log("No resource tiles found");
+        }
+        CalculateResourcesWithinRange();
         currentSettledProgressDisplay = 0f;
         GameObject.Find("SettledPercentage").GetComponent<Text>().text = settledValue.ToString() + "%";
         int popLoss = CalculatedPopLossOnBreakCamp(settledValue);
@@ -109,6 +125,18 @@ public class EncampmentManager : MonoBehaviour
         int popLossNextTurn = CalculatedPopLossOnBreakCamp(settledValue + settlingPerTurn);
         GameObject.Find("PredictedLossNexTurnText").GetComponent<Text>().text = popLossNextTurn.ToString();
         SetPossibleHuntGain();
+    }
+
+    void CalculateResourcesWithinRange()
+    {
+        foreach (GameObject t in resourceTilesWithinRange)
+        {
+            ResourceTile tileInfo = t.GetComponent<ResourceTile>();
+            huntFood = huntFood + tileInfo.food;
+            gatherWood = gatherWood + tileInfo.wood;
+            craftingTools = craftingTools + tileInfo.tools;
+        }
+        //TODO: Make a list of all resources currently within range
     }
 
     public void PerTurnSettlement(float value)

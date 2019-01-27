@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class DisplayCraftTooltip : MonoBehaviour
 {
     public GameObject tooltip;
+    public Text fromResources;
     public Text fromPops;
     EncampmentManager encampmentManager;
     PlayerInventory playerInventory;
@@ -20,7 +21,9 @@ public class DisplayCraftTooltip : MonoBehaviour
     {
         int minFromPops = playerInventory.CalcToolsGainFromPops(encampmentManager.minGatherWood);
         int maxFromPops = playerInventory.CalcToolsGainFromPops(encampmentManager.maxGatherWood);
+        int toolsFromResources = playerInventory.CalcToolsGainFromResources(1);
         tooltip.SetActive(true);
+        fromResources.text = toolsFromResources.ToString();
         fromPops.text = minFromPops.ToString() + "-" + maxFromPops.ToString();
     }
     public void UpdateCraftTooltip()
