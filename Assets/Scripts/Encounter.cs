@@ -31,8 +31,16 @@ public class Encounter : MonoBehaviour
     public Text OptionCText;
     public Text OptionCTooltip;
 
+    public bool hasFired = false;
+
+    EncounterManager encounterManager;
+
     public void ActivateEncounter()
     {
+        hasFired = true;
+        encounterManager = GameObject.Find("EncounterManager").GetComponent<EncounterManager>();
+        encounterManager.activeEncounter = gameObject;
+
         encounterTitle.text = title;
         encounterText.text = text;
 
@@ -43,17 +51,18 @@ public class Encounter : MonoBehaviour
             OptionB.SetActive(true);
             OptionBText.text = optionBName;
         }
+        else
+        {
+            OptionB.SetActive(false);
+        }
         if (hasOptionC)
         {
             OptionC.SetActive(true);
             OptionCText.text = optionCName;
         }
-    }
-
-    public void CloseEncounter()
-    {
-        OptionC.SetActive(false);
-        OptionB.SetActive(false);
-        gameObject.SetActive(false);
+        else
+        {
+            OptionC.SetActive(false);
+        }
     }
 }
