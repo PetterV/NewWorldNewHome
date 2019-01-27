@@ -29,17 +29,17 @@ public class InventoryPanel : MonoBehaviour
 
     public void UpdateInventoryView()
     {
-        foodHeader.text = "Food [" + playerInventory.foodSize.ToString() + "]";
-        woodHeader.text = "Wood [" + playerInventory.woodSize.ToString() + "]";
-        toolsHeader.text = "Tools [" + playerInventory.toolSize.ToString() + "]";
+        foodHeader.text = "[" + playerInventory.foodSize.ToString() + "]";
+        woodHeader.text = "[" + playerInventory.woodSize.ToString() + "]";
+        toolsHeader.text = "[" + playerInventory.toolSize.ToString() + "]";
         maxInventory.text = playerInventory.maxInventory.ToString();
         currentInventory.text = playerInventory.currentInventory.ToString();
         currentFood.text = playerInventory.currentFood.ToString();
         foodSpace.text = "(" + playerInventory.foodSpace.ToString() + ")";
-        foodPerTurn.text = "Food per turn: -" + playerInventory.CalcFoodPerTurn(playerInventory.foodPerTurn).ToString();
+        foodPerTurn.text = "Per turn: -" + playerInventory.CalcFoodPerTurn(playerInventory.foodPerTurn).ToString();
         currentWood.text = playerInventory.currentWood.ToString();
         woodSpace.text = "(" + playerInventory.woodSpace.ToString() + ")";
-        woodPerTurn.text = "Wood per turn: -" + playerInventory.CalcWoodPerTurn(playerInventory.woodPerTurn).ToString();
+        woodPerTurn.text = "Per turn: -" + playerInventory.CalcWoodPerTurn(playerInventory.woodPerTurn).ToString();
         currentTools.text = playerInventory.currentTools.ToString();
         toolSpace.text = "(" + playerInventory.toolSpace.ToString() + ")";
         currentPops.text = playerInventory.currentPops.ToString();
