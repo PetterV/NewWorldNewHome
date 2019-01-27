@@ -6,7 +6,7 @@ public class TurnManager : MonoBehaviour
 {
     public int turn = 0;
     public bool takingTurn = false;
-    public float turnExecutionTimer = 1.0f;
+    public float turnExecutionTimer = 0.15f;
     public float timer = 0.0f;
     bool wrappingUpTurn = false;
     GameController gameController;

@@ -7,6 +7,7 @@ public class GameController : MonoBehaviour
     public float tileSize = 0.01f;
     public GameObject player;
     public TurnManager turnManager;
+    public PlayerInventory playerInventory;
     public string mode;
     // Start is called before the first frame update
     void Start()
@@ -15,6 +16,7 @@ public class GameController : MonoBehaviour
         player = GameObject.Find("Player");
         player.GetComponent<PlayerMovement>().tileSize = tileSize;
         player.GetComponent<PlayerMovement>().gameController = this;
+        playerInventory = player.GetComponent<PlayerInventory>();
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         GameObject.Find("InventoryPanel").GetComponent<InventoryPanel>().UpdateInventoryView();
     }
