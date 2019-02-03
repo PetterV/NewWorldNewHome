@@ -142,6 +142,11 @@ public class EncampmentManager : MonoBehaviour
     public void PerTurnSettlement(float value)
     {
         settledValue += value;
+        if (settledValue >= 100)
+        {
+            settledValue = 100;
+            gameController.GameOver("settled");
+        }
         GameObject.Find("SettledPercentage").GetComponent<Text>().text = settledValue.ToString() + "%";
         int popLoss = CalculatedPopLossOnBreakCamp(settledValue);
         int popLossNextTurn = CalculatedPopLossOnBreakCamp(settledValue + settlingPerTurn);

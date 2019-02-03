@@ -7,6 +7,7 @@ public class PlayerInventory : MonoBehaviour
     public int foodPerTurn = 1; //Base value of food lost per turn when relevant (For Food it always is?)
     public int woodPerTurn = 1; //Base value of wood lost per turn when relevant
     public int maxInventory; //Max inventory size
+    public int maxInventoryFactor = 2; //The value that the populationnumber is multiplied by to get the maxInventory
     public int currentInventory; //Current inventory size. When this is goes over maxInventory, resources will be lost
     public int currentWood = 80; //Current amount of wood
     public int currentFood = 100; //Current amount of Food
@@ -39,7 +40,7 @@ public class PlayerInventory : MonoBehaviour
         encampmentManager = GameObject.Find("EncampmentManager").GetComponent<EncampmentManager>();
         playerMovement = GetComponent<PlayerMovement>();
         currentPops = startingPops;
-        maxInventory = currentPops * 2;
+        maxInventory = currentPops * maxInventoryFactor;
         CalculateInventorySpace();
     }
 
@@ -138,7 +139,7 @@ public class PlayerInventory : MonoBehaviour
         if (currentPops <= 0)
         {
             currentPops = 0;
-            //TODO: Game Over goes here
+            GameObject.Find("GameController").GetComponent<GameController>().GameOver("popLoss");
         }
         inventoryPanel.UpdateInventoryView();
         popsValueBox.GetComponent<ValueChangeTooltip>().Activate(value, "loss");
@@ -285,6 +286,12 @@ public class PlayerInventory : MonoBehaviour
         float popModifier = currentPops / 50;
 
         int foodToConsume = Mathf.RoundToInt(baseValue * popModifier);
+
+        //Make sure there's a minimum food loss each turn
+        if(foodToConsume < baseValue)
+        {
+            foodToConsume = baseValue;
+        }
 
         return foodToConsume;
     }

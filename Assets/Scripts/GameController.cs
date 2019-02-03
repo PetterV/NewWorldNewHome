@@ -15,7 +15,6 @@ public class GameController : MonoBehaviour
     GameObject pauseBoard;
     public bool isPaused = false;
     public bool pausedByEvent = false;
-    GameObject gameOverScreen;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,7 +26,6 @@ public class GameController : MonoBehaviour
         player.GetComponent<PlayerMovement>().gameController = this;
         playerInventory = player.GetComponent<PlayerInventory>();
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
-        gameOverScreen = GameObject.Find("GameOverScreen");
         GameObject.Find("InventoryPanel").GetComponent<InventoryPanel>().UpdateInventoryView();
     }
 
@@ -59,11 +57,16 @@ public class GameController : MonoBehaviour
         pausedByEvent = false;
     }
 
-    public void GameOver()
+    public void GameOver(string cause)
     {
-        Pause(true);
-        pauseBoard.SetActive(false);
-        gameOverScreen.SetActive(true);
+        if(cause == "popLoss")
+        {
+            GameObject.Find("EncounterManager").GetComponent<EncounterManager>().EncounterSetup("GameOverScreen");
+        }
+        else if(cause == "settled")
+        {
+            GameObject.Find("EncounterManager").GetComponent<EncounterManager>().EncounterSetup("SettledScreen");
+        }
     }
 
     public void Restart()
