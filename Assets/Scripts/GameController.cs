@@ -9,10 +9,16 @@ public class GameController : MonoBehaviour
     public TurnManager turnManager;
     public PlayerInventory playerInventory;
     public string mode;
+    public string modePausedFrom;
     public System.Random random = new System.Random();
+    public GameObject pauseBoard;
+    public bool isPaused = false;
+    public bool pausedByEvent = false;
     // Start is called before the first frame update
     void Start()
     {
+        pauseBoard = GameObject.Find("PauseBoard");
+        pauseBoard.SetActive(false);
         mode = "camp";
         player = GameObject.Find("Player");
         player.GetComponent<PlayerMovement>().tileSize = tileSize;
@@ -22,9 +28,31 @@ public class GameController : MonoBehaviour
         GameObject.Find("InventoryPanel").GetComponent<InventoryPanel>().UpdateInventoryView();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown("p"))
+        {
+            if (isPaused && !pausedByEvent)
+            {
+                UnPause();
+            }
+            else
+            {
+                Pause(false);
+            }
+        }
+    }
+
+    public void Pause(bool fromEvent)
+    {
+        pauseBoard.SetActive(true);
+        isPaused = true;
+    }
+
+    public void UnPause()
+    {
+        pauseBoard.SetActive(false);
+        isPaused = false;
+        pausedByEvent = false;
     }
 }

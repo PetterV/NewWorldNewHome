@@ -52,7 +52,7 @@ public class EncampmentManager : MonoBehaviour
 
     public void Hunt()
     {
-        if (!turnManager.takingTurn)
+        if (!turnManager.takingTurn && !gameController.isPaused)
         {
             int foodToGather = gameController.random.Next(minHuntFood, maxHuntFood + 1);
             int finalFoodGained = playerInventory.CalcHuntGain(foodToGather);
@@ -64,7 +64,7 @@ public class EncampmentManager : MonoBehaviour
     }
     public void Gather()
     {
-        if (!turnManager.takingTurn)
+        if (!turnManager.takingTurn && !gameController.isPaused)
         {
             int woodToGather = gameController.random.Next(minGatherWood, maxGatherWood + 1);
             int finalWoodGained = playerInventory.CalcGatherGain(woodToGather);
@@ -76,7 +76,7 @@ public class EncampmentManager : MonoBehaviour
     }
     public void Craft()
     {
-        if (!turnManager.takingTurn)
+        if (!turnManager.takingTurn && !gameController.isPaused)
         {
             int toolsToCraft = gameController.random.Next(minCraftingTools, maxCraftingTools + 1);
             int finalToolsGained = playerInventory.CalcCraftingGain(toolsToCraft);

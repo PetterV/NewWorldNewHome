@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!gameController.turnManager.takingTurn)
+        if (!gameController.turnManager.takingTurn && !gameController.isPaused)
         {
             if (!readyToMove && Input.GetKeyDown(KeyCode.Space))
             {

@@ -63,12 +63,29 @@ public class PlayerInventory : MonoBehaviour
     {
         int foodToConsume = CalcFoodPerTurn(value);
         currentFood = currentFood - foodToConsume;
+        if(currentFood < 0)
+        {
+            int foodBalance = currentFood;
+            currentFood = 0;
+            PopLossFromFood(foodBalance);
+            foodToConsume = foodToConsume - foodBalance;
+        }
         CalculateInventorySpace();
         foodValueBox.GetComponent<ValueChangeTooltip>().Activate(foodToConsume, "loss");
+    }
+
+    public void PopLossFromFood(int foodMissing)
+    {
+        int popsToLose = foodMissing * -1;
+        LosePops(popsToLose);
     }
     public void UseWood(int value)
     {
         currentWood = currentWood - value;
+        if (currentWood < 0)
+        {
+            currentWood = 0;
+        }
         CalculateInventorySpace();
         if (value > 0)
         {
@@ -80,15 +97,30 @@ public class PlayerInventory : MonoBehaviour
     {
         int woodToConsume = CalcWoodPerTurn(value);
         currentWood = currentWood - woodToConsume;
+        if (currentWood < 0)
+        {
+            int woodMissing = currentWood;
+            currentWood = 0;
+            PopLossFromWood(woodMissing);
+        }
         CalculateInventorySpace();
         if (woodToConsume > 0)
         {
             woodValueBox.GetComponent<ValueChangeTooltip>().Activate(woodToConsume, "loss");
         }
     }
+    public void PopLossFromWood(int woodMissing)
+    {
+        int popsToLose = woodMissing * -2;
+        LosePops(popsToLose);
+    }
     public void UseTools(int value)
     {
         currentTools = currentTools - value;
+        if (currentTools < 0)
+        {
+            currentTools = 0;
+        }
         CalculateInventorySpace();
         if (value > 0)
         {
@@ -98,9 +130,19 @@ public class PlayerInventory : MonoBehaviour
 
     public void LosePops(int value)
     {
+        if (currentPops - value <= 0)
+        {
+            value = currentPops;
+        }
         currentPops = currentPops - value;
+        if (currentPops <= 0)
+        {
+            currentPops = 0;
+            //TODO: Game Over goes here
+        }
         inventoryPanel.UpdateInventoryView();
         popsValueBox.GetComponent<ValueChangeTooltip>().Activate(value, "loss");
+
     }
 
     public void GainFood(int value)
