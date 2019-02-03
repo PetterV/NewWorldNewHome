@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -11,9 +12,10 @@ public class GameController : MonoBehaviour
     public string mode;
     public string modePausedFrom;
     public System.Random random = new System.Random();
-    public GameObject pauseBoard;
+    GameObject pauseBoard;
     public bool isPaused = false;
     public bool pausedByEvent = false;
+    GameObject gameOverScreen;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +27,7 @@ public class GameController : MonoBehaviour
         player.GetComponent<PlayerMovement>().gameController = this;
         playerInventory = player.GetComponent<PlayerInventory>();
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
+        gameOverScreen = GameObject.Find("GameOverScreen");
         GameObject.Find("InventoryPanel").GetComponent<InventoryPanel>().UpdateInventoryView();
     }
 
@@ -54,5 +57,17 @@ public class GameController : MonoBehaviour
         pauseBoard.SetActive(false);
         isPaused = false;
         pausedByEvent = false;
+    }
+
+    public void GameOver()
+    {
+        Pause(true);
+        pauseBoard.SetActive(false);
+        gameOverScreen.SetActive(true);
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene("SampleScene", LoadSceneMode.Single);
     }
 }
