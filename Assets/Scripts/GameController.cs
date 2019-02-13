@@ -15,6 +15,11 @@ public class GameController : MonoBehaviour
     GameObject pauseBoard;
     public bool isPaused = false;
     public bool pausedByEvent = false;
+    public float homelandCloseRange = 100f;
+    public float homelandMediumNearRange = 300f;
+    public float homelandMediumFarRange = 800f;
+
+
     // Start is called before the first frame update
     void Start()
     {

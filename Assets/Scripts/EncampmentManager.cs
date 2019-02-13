@@ -35,7 +35,6 @@ public class EncampmentManager : MonoBehaviour
     GameController gameController;
     ResourceTileManager resourceTileManager;
     public List<GameObject> resourceTilesWithinRange;
-    
 
     // Start is called before the first frame update
     void Start()
@@ -125,6 +124,8 @@ public class EncampmentManager : MonoBehaviour
         int popLossNextTurn = CalculatedPopLossOnBreakCamp(settledValue + settlingPerTurn);
         GameObject.Find("PredictedLossNexTurnText").GetComponent<Text>().text = popLossNextTurn.ToString();
         SetPossibleHuntGain();
+        //Fire Monolith events if relevant
+        GameObject.Find("ResourceTileManager").GetComponent<ResourceTileManager>().CheckForMonoliths();
     }
 
     void CalculateResourcesWithinRange()
