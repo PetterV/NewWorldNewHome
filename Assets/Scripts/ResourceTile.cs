@@ -14,6 +14,7 @@ public class ResourceTile : MonoBehaviour
     public int food = 0;
     public int wood = 0;
     public int tools = 0;
+    public int tileWeight = 1;
     public Color closeColor;
     public Color defaultColor;
 

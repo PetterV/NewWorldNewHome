@@ -7,6 +7,9 @@ public class ResourceTileManager : MonoBehaviour
 {
     public GameObject[] allResourceTiles;
     public GameObject[] allMonoliths;
+    public GameObject[] resourceTileTypes;
+    public GameObject monolithPrefab;
+
     EncampmentManager encampmentManager;
     GameController gameController;
     EncounterManager encounterManager;
@@ -18,6 +21,8 @@ public class ResourceTileManager : MonoBehaviour
         encounterManager = GameObject.Find("EncounterManager").GetComponent<EncounterManager>();
         allResourceTiles = GameObject.FindGameObjectsWithTag("ResourceTile");
         allMonoliths = GameObject.FindGameObjectsWithTag("Monolith");
+        //Setup for world generation
+        EstablishWeights();
     }
 
     public void FindResourceTilesWithinRange()
@@ -69,5 +74,40 @@ public class ResourceTileManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    void EstablishWeights()
+    {
+        int totalWeights = 0;
+        foreach (GameObject t in resourceTileTypes)
+        {
+            totalWeights = totalWeights + t.GetComponent<ResourceTile>().tileWeight;
+        }
+        float perWeightValue = 100 / totalWeights;
+        Debug.Log("The initial totalWeightValue is " + totalWeights + ", which results in a perWeightValue of " + perWeightValue);
+        int weightFrame = 0;
+        foreach (GameObject t in resourceTileTypes)
+        {
+            float tempTileWeight = t.GetComponent<ResourceTile>().tileWeight * perWeightValue;
+            t.GetComponent<ResourceTile>().tileWeight = Mathf.RoundToInt(weightFrame + tempTileWeight);
+            weightFrame = weightFrame + Mathf.RoundToInt(tempTileWeight);
+            Debug.Log(t.name + " has a weight of " + t.GetComponent<ResourceTile>().tileWeight);
+        }
+    }
+
+    public GameObject randomiseTileType()
+    {
+        int roll = gameController.random.Next(100);
+        GameObject tileToSend = null;
+
+        foreach(GameObject t in resourceTileTypes)
+        {
+            if (tileToSend == null && roll < t.GetComponent<ResourceTile>().tileWeight)
+            {
+                tileToSend = t;
+            }
+        }
+        
+        return tileToSend;
     }
 }

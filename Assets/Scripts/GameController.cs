@@ -6,9 +6,12 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
     public float tileSize = 0.01f;
+    public float worldWidth = 50f;
+    public float worldHeight = 25f;
     public GameObject player;
     public TurnManager turnManager;
     public PlayerInventory playerInventory;
+    public GameObject loadScreen;
     public string mode;
     public string modePausedFrom;
     public System.Random random = new System.Random();
@@ -32,6 +35,10 @@ public class GameController : MonoBehaviour
         playerInventory = player.GetComponent<PlayerInventory>();
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         GameObject.Find("InventoryPanel").GetComponent<InventoryPanel>().UpdateInventoryView();
+
+        //Generate the world
+        GameObject.Find("WorldCreationManager").GetComponent<WorldCreationManager>().SetUpWorld();
+        loadScreen.SetActive(false);
     }
 
     void Update()
