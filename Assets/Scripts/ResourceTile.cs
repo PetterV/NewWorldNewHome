@@ -23,7 +23,7 @@ public class ResourceTile : MonoBehaviour
     public bool isWithinRange = false;
 
     GameController gameController;
-    void Start()
+    void Awake()
     {
         gameController = GameObject.Find("GameController").GetComponent<GameController>();
         playerCollider = GameObject.Find("ResourceCollider").GetComponent<Collider2D>();

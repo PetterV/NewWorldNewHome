@@ -18,7 +18,13 @@ public class WorldCreationManager : MonoBehaviour
     int tilesInWidth;
     int tilesInHeight;
 
+    public GameObject homeland;
     public float tileChance = 10;
+    public float homelandTileChance = 30;
+
+    Collider2D positionRefCollider;
+    Collider2D homelandCollider;
+    Collider2D startAreaCollider;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +32,9 @@ public class WorldCreationManager : MonoBehaviour
         gameController = GameObject.Find("GameController").GetComponent<GameController>();
         tileManager = GameObject.Find("ResourceTileManager").GetComponent<ResourceTileManager>();
         refTransform = GameObject.Find("TileCreationTransform").GetComponent<Transform>();
+        positionRefCollider = GameObject.Find("TileCreationTransform").GetComponent<Collider2D>();
+        homelandCollider = GameObject.Find("Homeland").GetComponent<Collider2D>();
+        startAreaCollider = GameObject.Find("StartArea").GetComponent<Collider2D>();
         tileSize = gameController.tileSize;
         worldWidth = gameController.worldWidth;
         worldHeight = gameController.worldHeight;
@@ -43,16 +52,49 @@ public class WorldCreationManager : MonoBehaviour
         Debug.Log(tilesInWidth + " tiles in width");
         tilesInHeight = Mathf.RoundToInt(tilesInHeightFloat);
         Debug.Log(tilesInHeight + " tiles in height");
-
+        SetUpHomeland();
         SetUpResourceTiles();
     }
-    void SetUpResourceTiles()
+    void SetUpHomeland()
     {
-        int widthDone = 1;
+        bool homelandSet = false;
+        while (!homelandSet)
+        {
+            FindRandomHomelandLocation();
+            homelandSet = ValidateHomelandLocation();
+        }
+    }
+
+    void FindRandomHomelandLocation()
+    {
+        //TODO: This isn't working quite as it should. I'm probably doing the calculations in the wrong order
+        float tempRandomX = r.Next(Mathf.RoundToInt(worldWidth));
+        float randomX = tempRandomX * tileSize;
+        float tempRandomY = r.Next(Mathf.RoundToInt(worldHeight));
+        float randomY = tempRandomY * tileSize;
+        GameObject.Find("Homeland").GetComponent<Transform>().position = new Vector3(randomX, randomY);
+    }
+    bool ValidateHomelandLocation()
+    {
+        //TODO: Evaluate the homeland location properly here
+
+        if (homelandCollider.bounds.Intersects(startAreaCollider.bounds))
+        {
+            Debug.Log("Homeland collides with StartArea, roll again.");
+            return false;
+        }
+        else
+        {
+            Debug.Log("No issues found with Homeland location, setting it here.");
+            return true;
+        }
+    }
+    void SetUpResourceTiles() //The setup of resource tiles across the map
+    {
+        int widthDone = 1; //Starts at 1, since we're counting tile numbers
         int heightDone = 1;
         bool resourceTilesComplete = false;
-
-        int roll;
+        
         Debug.Log("Generating tiles...");
         while (!resourceTilesComplete)
         {
@@ -60,15 +102,14 @@ public class WorldCreationManager : MonoBehaviour
             {
                 //Generate the first tile in a row
                 refTransform.position = currentPosition + new Vector3(gameController.tileSize * widthDone, 0);
-                roll = r.Next(100);
-                GenerateTile(roll);
+
+                RollForGeneration();
 
                 //Generate the entire row
                 while (heightDone < tilesInHeight)
                 {
                     refTransform.position = currentPosition + new Vector3(0, gameController.tileSize * heightDone);
-                    roll = r.Next(100);
-                    GenerateTile(roll);
+                    RollForGeneration();
                     heightDone++;
                 }
                 heightDone = 0;
@@ -85,12 +126,38 @@ public class WorldCreationManager : MonoBehaviour
         }
     }
 
-    void GenerateTile(int chance)
+    void RollForGeneration() //Does the actual rolling for generation of tiles
     {
-        Debug.Log("Evaluating tile chance: " + chance);
-        if (chance <= tileChance)
+        int roll = r.Next(100);
+        bool withinHomelandRange = isWithinHomelandRange();
+
+        if (withinHomelandRange)
         {
-            Debug.Log("Rolled within random range, attempting to create tile");
+            GenerateTile(roll, homelandTileChance);
+        }
+        else
+        {
+            GenerateTile(roll, tileChance);
+        }
+    }
+
+    bool isWithinHomelandRange() //Checks whether the ref collider is currently within range of the homeland area
+    {
+        if (positionRefCollider.bounds.Intersects(homelandCollider.bounds))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    void GenerateTile(int chance, float spawnChance) //Check the chance of spawning a tile based on a %-roll, and generate a tile if relevant
+    {
+        if (chance <= spawnChance)
+        {
+            //Debug.Log("Rolled within random range, attempting to create tile");
             GameObject tileToCreate = tileManager.randomiseTileType(); //Picks a tile type to place based on weights
             if (tileToCreate == null)
             {
@@ -98,7 +165,12 @@ public class WorldCreationManager : MonoBehaviour
             }
             Instantiate(tileToCreate, refTransform, true); //Creates the tile
 
-            Debug.Log("Tried to create " + tileToCreate.name);
+            //Debug.Log("Tried to create " + tileToCreate.name);
         }
+    }
+
+    void PlaceHomeland()
+    {
+
     }
 }

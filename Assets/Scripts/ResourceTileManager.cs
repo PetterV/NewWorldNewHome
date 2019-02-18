@@ -81,9 +81,9 @@ public class ResourceTileManager : MonoBehaviour
         int totalWeights = 0;
         foreach (GameObject t in resourceTileTypes)
         {
-            totalWeights = totalWeights + t.GetComponent<ResourceTile>().tileWeight;
+            totalWeights = totalWeights + t.GetComponent<ResourceTile>().tileWeight; 
         }
-        float perWeightValue = 100 / totalWeights;
+        float perWeightValue = 100 / totalWeights; //Figure out what the value per weight defined in the prefab resourcetile objects should be (i.e. perWeightValue of 10 and a weight of 6 gives 60)
         Debug.Log("The initial totalWeightValue is " + totalWeights + ", which results in a perWeightValue of " + perWeightValue);
         int weightFrame = 0;
         foreach (GameObject t in resourceTileTypes)

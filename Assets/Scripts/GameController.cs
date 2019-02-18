@@ -26,6 +26,7 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //TODO: Make other manager's be activated from here, rather than using void Start
         pauseBoard = GameObject.Find("PauseBoard");
         pauseBoard.SetActive(false);
         mode = "camp";
