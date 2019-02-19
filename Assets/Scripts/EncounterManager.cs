@@ -22,6 +22,7 @@ public class EncounterManager : MonoBehaviour
 
     public void EncounterSetup(string encounterName)
     {
+        gameController.Pause(true);
         foreach (GameObject encounter in encounters)
         {
             if (encounter.name == encounterName)
@@ -34,6 +35,7 @@ public class EncounterManager : MonoBehaviour
 
     public void CloseEncounter()
     {
+        gameController.UnPause();
         activeEncounter.SetActive(false);
     }
 

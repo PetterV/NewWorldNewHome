@@ -7,6 +7,8 @@ TagManager:
   - Encounter
   - ResourceTile
   - MoveBlocker
+  - Homeland
+  - Monolith
   layers:
   - Default
   - TransparentFX
@@ -55,4 +57,7 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 1759950539
+    locked: 0
+  - name: Tooltips
+    uniqueID: 3786723953
     locked: 0

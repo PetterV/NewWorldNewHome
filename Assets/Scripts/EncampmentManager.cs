@@ -35,7 +35,6 @@ public class EncampmentManager : MonoBehaviour
     GameController gameController;
     ResourceTileManager resourceTileManager;
     public List<GameObject> resourceTilesWithinRange;
-    
 
     // Start is called before the first frame update
     void Start()
@@ -52,7 +51,7 @@ public class EncampmentManager : MonoBehaviour
 
     public void Hunt()
     {
-        if (!turnManager.takingTurn)
+        if (!turnManager.takingTurn && !gameController.isPaused)
         {
             int foodToGather = gameController.random.Next(minHuntFood, maxHuntFood + 1);
             int finalFoodGained = playerInventory.CalcHuntGain(foodToGather);
@@ -64,7 +63,7 @@ public class EncampmentManager : MonoBehaviour
     }
     public void Gather()
     {
-        if (!turnManager.takingTurn)
+        if (!turnManager.takingTurn && !gameController.isPaused)
         {
             int woodToGather = gameController.random.Next(minGatherWood, maxGatherWood + 1);
             int finalWoodGained = playerInventory.CalcGatherGain(woodToGather);
@@ -76,7 +75,7 @@ public class EncampmentManager : MonoBehaviour
     }
     public void Craft()
     {
-        if (!turnManager.takingTurn)
+        if (!turnManager.takingTurn && !gameController.isPaused)
         {
             int toolsToCraft = gameController.random.Next(minCraftingTools, maxCraftingTools + 1);
             int finalToolsGained = playerInventory.CalcCraftingGain(toolsToCraft);
@@ -125,6 +124,8 @@ public class EncampmentManager : MonoBehaviour
         int popLossNextTurn = CalculatedPopLossOnBreakCamp(settledValue + settlingPerTurn);
         GameObject.Find("PredictedLossNexTurnText").GetComponent<Text>().text = popLossNextTurn.ToString();
         SetPossibleHuntGain();
+        //Fire Monolith events if relevant
+        GameObject.Find("ResourceTileManager").GetComponent<ResourceTileManager>().CheckForMonoliths();
     }
 
     void CalculateResourcesWithinRange()
@@ -142,6 +143,11 @@ public class EncampmentManager : MonoBehaviour
     public void PerTurnSettlement(float value)
     {
         settledValue += value;
+        if (settledValue >= 100)
+        {
+            settledValue = 100;
+            gameController.GameOver("settled");
+        }
         GameObject.Find("SettledPercentage").GetComponent<Text>().text = settledValue.ToString() + "%";
         int popLoss = CalculatedPopLossOnBreakCamp(settledValue);
         int popLossNextTurn = CalculatedPopLossOnBreakCamp(settledValue + settlingPerTurn);

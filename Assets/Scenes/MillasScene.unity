@@ -647,12 +647,12 @@ MonoBehaviour:
   - {fileID: 9557584}
   - {fileID: 9557583}
   resourceGatheredSFX:
-  - {fileID: 8300000, guid: 5835629d89be48c429cf92a712bbdf6f, type: 3}
-  - {fileID: 8300000, guid: 3612fb3c17299ca48be1dda4c6e6b08a, type: 3}
-  - {fileID: 8300000, guid: 8843094a75354b744a237cdfab8aa98a, type: 3}
+  - {fileID: 8300000, guid: a0e9b41e6de6b054b8775f968e92d52d, type: 3}
+  - {fileID: 8300000, guid: 62b9cb44a0bf23242bf001ad32237391, type: 3}
+  - {fileID: 8300000, guid: 9e96a1034571d2e489f7fcba5c9cf752, type: 3}
   settingUpCampSFX:
-  - {fileID: 8300000, guid: c2da18e5dd8211249a4f4896b0c718ba, type: 3}
-  - {fileID: 8300000, guid: 81312fb645bde67429b1742ec234cd98, type: 3}
+  - {fileID: 8300000, guid: a4e6a39624c007a4194f504939ddeda3, type: 3}
+  - {fileID: 8300000, guid: 480c41c24c37132479f0aa1841f7d9ac, type: 3}
   encounterSFX:
   - {fileID: 0}
   - {fileID: 0}

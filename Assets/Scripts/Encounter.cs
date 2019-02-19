@@ -45,11 +45,13 @@ public class Encounter : MonoBehaviour
         encounterText.text = text;
 
         OptionAText.text = optionAName;
+        OptionATooltip.text = optionATooltip;
 
         if (hasOptionB)
         {
             OptionB.SetActive(true);
             OptionBText.text = optionBName;
+            OptionBTooltip.text = optionBTooltip;
         }
         else
         {
@@ -59,6 +61,7 @@ public class Encounter : MonoBehaviour
         {
             OptionC.SetActive(true);
             OptionCText.text = optionCName;
+            OptionCTooltip.text = optionCTooltip;
         }
         else
         {
