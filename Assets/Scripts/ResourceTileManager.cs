@@ -19,10 +19,14 @@ public class ResourceTileManager : MonoBehaviour
         encampmentManager = GameObject.Find("EncampmentManager").GetComponent<EncampmentManager>();
         gameController = GameObject.Find("GameController").GetComponent<GameController>();
         encounterManager = GameObject.Find("EncounterManager").GetComponent<EncounterManager>();
-        allResourceTiles = GameObject.FindGameObjectsWithTag("ResourceTile");
-        allMonoliths = GameObject.FindGameObjectsWithTag("Monolith");
         //Setup for world generation
         EstablishWeights();
+    }
+
+    public void RegisterResourceTiles() //Called from world creation *after* tiles have been created
+    {
+        allResourceTiles = GameObject.FindGameObjectsWithTag("ResourceTile");
+        allMonoliths = GameObject.FindGameObjectsWithTag("Monolith");
     }
 
     public void FindResourceTilesWithinRange()

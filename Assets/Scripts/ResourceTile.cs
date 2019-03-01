@@ -30,6 +30,7 @@ public class ResourceTile : MonoBehaviour
         RandomiseResources();
         GetComponent<SpriteRenderer>().color = defaultColor;
     }
+
     public void RandomiseResources()
     {
         wood = gameController.random.Next(minWood, maxWood + 1);
@@ -43,7 +44,7 @@ public class ResourceTile : MonoBehaviour
         {
             GetComponent<SpriteRenderer>().color = closeColor;
         }
-        else if (GetComponent<SpriteRenderer>().color == closeColor &! GetComponent<Collider2D>().bounds.Intersects(playerCollider.bounds))
+        else if (GetComponent<SpriteRenderer>().color == closeColor & !GetComponent<Collider2D>().bounds.Intersects(playerCollider.bounds))
         {
             GetComponent<SpriteRenderer>().color = defaultColor;
         }

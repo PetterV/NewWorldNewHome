@@ -124,6 +124,8 @@ public class WorldCreationManager : MonoBehaviour
         {
             t.SetActive(false);
         }
+
+        tileManager.RegisterResourceTiles();
     }
 
     void RollForGeneration() //Does the actual rolling for generation of tiles
