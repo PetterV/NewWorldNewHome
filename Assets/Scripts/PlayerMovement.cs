@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     bool canMoveEast;
     bool canMoveSouth;
     bool canMoveWest;
+    public bool isHunting = false;
 
     void Start()
     {
@@ -220,7 +221,10 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Drain food per turn
-        inventory.UseFoodPerRound(inventory.foodPerTurn);
+        if (!isHunting)
+        {
+            inventory.UseFoodPerRound();
+        }
         if (isEncamped)
         {
             inventory.UseWoodPerRound(inventory.woodPerTurn);

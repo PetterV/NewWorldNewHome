@@ -22,12 +22,12 @@ public class PlayerInventory : MonoBehaviour
     public int startingPops = 500; //Number of starting pops
     public int currentPops; //Number of current pops
 
-    public GameObject foodValueBox; //The box appearing when the food value changes
-    public GameObject woodValueBox; //The box appearing when the wood value changes
-    public GameObject toolsValueBox; //The box appearing when the tools value changes
-    public GameObject popsValueBox; //The box appearing when the pops value changes
+    public GameObject foodValueBox; //The food box 
+    public GameObject woodValueBox; //The wood box
+    public GameObject toolsValueBox; //The tools box
+    public GameObject popsValueBox; //The pops box
 
-    float woodUsageThreshold = 25f; //The threshold of the "Settled" value that will trigger wood-per-turn usage
+    public float woodUsageThreshold = 25f; //The threshold of the "Settled" value that will trigger wood-per-turn usage
 
     InventoryPanel inventoryPanel;
     EncampmentManager encampmentManager;
@@ -60,9 +60,9 @@ public class PlayerInventory : MonoBehaviour
         CalculateInventorySpace();
         foodValueBox.GetComponent<ValueChangeTooltip>().Activate(value, "loss");
     }
-    public void UseFoodPerRound(int value)
+    public void UseFoodPerRound()
     {
-        int foodToConsume = CalcFoodPerTurn(value);
+        int foodToConsume = CalcFoodPerTurn();
         currentFood = currentFood - foodToConsume;
         if(currentFood < 0)
         {
@@ -184,6 +184,10 @@ public class PlayerInventory : MonoBehaviour
     public int CalcFoodGainFromTools(int baseValue)
     {
         float toolsModifier = currentTools / 10;
+        if (toolsModifier > 10)
+        {
+            toolsModifier = 10;
+        }
         int foodFromTools = Mathf.RoundToInt(baseValue * toolsModifier);
 
         return foodFromTools;
@@ -229,6 +233,10 @@ public class PlayerInventory : MonoBehaviour
     public int CalcWoodGainFromTools(int baseValue)
     {
         float toolsModifier = currentTools / 10;
+        if (toolsModifier > 10)
+        {
+            toolsModifier = 10;
+        }
         int woodFromTools = Mathf.RoundToInt(baseValue * toolsModifier);
 
         return woodFromTools;
@@ -255,12 +263,11 @@ public class PlayerInventory : MonoBehaviour
     {
         //Currently basevalue times popmodifier
         float popModifier = CalcToolsGainFromPops(baseValue);
-        float toolsModifier = CalcWoodGainFromTools(baseValue);
         int resourceGain = CalcToolsGainFromResources(1);
 
-        int foodToGain = Mathf.RoundToInt(popModifier) + Mathf.RoundToInt(toolsModifier) + resourceGain;
+        int toolsToGain = Mathf.RoundToInt(popModifier) + resourceGain;
 
-        return foodToGain;
+        return toolsToGain;
     }
     public int CalcToolsGainFromPops(int baseValue)
     {
@@ -281,16 +288,16 @@ public class PlayerInventory : MonoBehaviour
         popsValueBox.GetComponent<ValueChangeTooltip>().Activate(value, "gain");
     }
 
-    public int CalcFoodPerTurn(int baseValue)
+    public int CalcFoodPerTurn()
     {
         float popModifier = currentPops / 50;
 
-        int foodToConsume = Mathf.RoundToInt(baseValue * popModifier);
+        int foodToConsume = Mathf.RoundToInt(foodPerTurn * popModifier);
 
         //Make sure there's a minimum food loss each turn
-        if(foodToConsume < baseValue)
+        if(foodToConsume < foodPerTurn)
         {
-            foodToConsume = baseValue;
+            foodToConsume = foodPerTurn;
         }
 
         return foodToConsume;

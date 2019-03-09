@@ -31,6 +31,10 @@ public class TurnManager : MonoBehaviour
         IncrementTurnCount();
         turnCounter.UpdateTurnCounter();
         playerMovement.ExecuteMove();
+        if (playerMovement.isHunting)
+        {
+            playerMovement.isHunting = false;
+        }
         if (playerMovement.isEncamped)
         {
             encampmentManager.SetPossibleGainValues();

@@ -5,12 +5,18 @@ using UnityEngine.UI;
 
 public class EncampmentManager : MonoBehaviour
 {
-    public int minHuntFood = 3; //The minimum basevalue used for acquiring Food
-    public int maxHuntFood = 5; //The maximum basevalue used for acquiring Food
-    public int minGatherWood = 2; //The minimum basevalue used for acquiring Wood
-    public int maxGatherWood = 4; //The maximum basevalue used for acquiring Food
+    public int minHuntFood = 1; //The minimum basevalue used for acquiring Food
+    public int maxHuntFood = 3; //The maximum basevalue used for acquiring Food
+    int minHuntGain;
+    int maxHuntGain;
+    public int minGatherWood = 1; //The minimum basevalue used for acquiring Wood
+    public int maxGatherWood = 3; //The maximum basevalue used for acquiring Food
+    int maxGatherGain;
+    int minGatherGain;
     public int minCraftingTools = 1; //The minimum basevalue used for acquiring Tools
     public int maxCraftingTools = 3; //The maximum basevalue used for acquiring Food
+    int minCraftingGain;
+    int maxCraftingGain;
 
     public int huntFood = 0;
     public int gatherWood = 0;
@@ -26,6 +32,11 @@ public class EncampmentManager : MonoBehaviour
     private float timer = 0.0f; //Timer used for the display of the Settled progress bar changing
     public float currentSettledProgressDisplay = 0; //Value used to display the correct fillrate for the Settled progress bar
     float settledProgressBarSpeed = 0.001f; //Used to determine the speed of the Settled progress bar filling
+
+    public GameObject FoodInventoryWarning;
+    public GameObject WoodInventoryWarning;
+    public GameObject ToolsInventoryWarning;
+    public GameObject WoodUsageWarning;
 
     //Various script targets
     PlayerInventory playerInventory;
@@ -53,35 +64,30 @@ public class EncampmentManager : MonoBehaviour
     {
         if (!turnManager.takingTurn && !gameController.isPaused)
         {
-            int foodToGather = gameController.random.Next(minHuntFood, maxHuntFood + 1);
-            int finalFoodGained = playerInventory.CalcHuntGain(foodToGather);
+            playerMovement.isHunting = true;
+            int foodToGain = gameController.random.Next(minHuntGain, maxHuntGain + 1);
             playerInventory.UseTools(huntCost);
-            playerInventory.GainFood(finalFoodGained);
+            playerInventory.GainFood(foodToGain);
             turnManager.TakeTurn();
-            //TODO: Show outcome somewhere on-screen
         }
     }
     public void Gather()
     {
         if (!turnManager.takingTurn && !gameController.isPaused)
         {
-            int woodToGather = gameController.random.Next(minGatherWood, maxGatherWood + 1);
-            int finalWoodGained = playerInventory.CalcGatherGain(woodToGather);
+            int woodToGather = gameController.random.Next(minGatherGain, maxGatherGain + 1);
             playerInventory.UseTools(gatherCost);
-            playerInventory.GainWood(finalWoodGained);
+            playerInventory.GainWood(woodToGather);
             turnManager.TakeTurn();
-            //TODO: Show outcome somewhere on-screen
         }
     }
     public void Craft()
     {
         if (!turnManager.takingTurn && !gameController.isPaused)
         {
-            int toolsToCraft = gameController.random.Next(minCraftingTools, maxCraftingTools + 1);
-            int finalToolsGained = playerInventory.CalcCraftingGain(toolsToCraft);
-            playerInventory.GainTools(finalToolsGained);
+            int toolsToCraft = gameController.random.Next(minCraftingGain, maxCraftingGain + 1);
+            playerInventory.GainTools(toolsToCraft);
             turnManager.TakeTurn();
-            //TODO: Show outcome somewhere on-screen
         }
     }
 
@@ -153,6 +159,14 @@ public class EncampmentManager : MonoBehaviour
         int popLossNextTurn = CalculatedPopLossOnBreakCamp(settledValue + settlingPerTurn);
         GameObject.Find("PredictedLossText").GetComponent<Text>().text = popLoss.ToString();
         GameObject.Find("PredictedLossNexTurnText").GetComponent<Text>().text = popLossNextTurn.ToString();
+        if (settledValue >= playerInventory.woodUsageThreshold)
+        {
+            WoodUsageWarning.SetActive(true);
+        }
+        else
+        {
+            WoodUsageWarning.SetActive(false);
+        }
     }
 
     public int CalculatedPopLossOnBreakCamp(float settledRating)
@@ -172,24 +186,69 @@ public class EncampmentManager : MonoBehaviour
     //The "SetPossibleBlahGain" methods are to display correct info on the camp action buttons
     public void SetPossibleHuntGain()
     {
-        int minHuntGain = playerInventory.CalcHuntGain(minHuntFood);
-        int maxHuntGain = playerInventory.CalcHuntGain(maxHuntFood);
+        minHuntGain = playerInventory.CalcHuntGain(minHuntFood);
+        maxHuntGain = playerInventory.CalcHuntGain(maxHuntFood);
 
         GameObject.Find("HuntPossibleGain").GetComponent<Text>().text = "+" + minHuntGain.ToString() + "-" + maxHuntGain.ToString();
+        //Calculate what the new inventorry can possibly be, and display warning if it can exceed inventory capacity
+        int maxPossibleInventory = playerInventory.currentInventory + maxHuntGain;
+        if(playerInventory.currentTools >= huntCost)
+        {
+            maxPossibleInventory = maxPossibleInventory - huntCost;
+        }
+        else
+        {
+            maxPossibleInventory = maxPossibleInventory - playerInventory.currentTools;
+        }
+        if (maxPossibleInventory > playerInventory.maxInventory)
+        {
+            FoodInventoryWarning.SetActive(true);
+        }
+        else
+        {
+            FoodInventoryWarning.SetActive(false);
+        }
     }
     public void SetPossibleGatherGain()
     {
-        int minGatherGain = playerInventory.CalcGatherGain(minGatherWood);
-        int maxGatherGain = playerInventory.CalcGatherGain(maxGatherWood);
+        minGatherGain = playerInventory.CalcGatherGain(minGatherWood);
+        maxGatherGain = playerInventory.CalcGatherGain(maxGatherWood);
 
         GameObject.Find("GatherPossibleGain").GetComponent<Text>().text = "+" + minGatherGain.ToString() + "-" + maxGatherGain.ToString();
+
+        //Calculate what the new inventorry can possibly be, and display warning if it can exceed inventory capacity
+        int maxPossibleInventory = playerInventory.currentInventory + maxGatherGain - playerInventory.CalcFoodPerTurn();
+        if (playerInventory.currentTools >= gatherCost)
+        {
+            maxPossibleInventory = maxPossibleInventory - gatherCost;
+        }
+        else
+        {
+            maxPossibleInventory = maxPossibleInventory - playerInventory.currentTools;
+        }
+        if (maxPossibleInventory > playerInventory.maxInventory)
+        {
+            WoodInventoryWarning.SetActive(true);
+        }
+        else
+        {
+            WoodInventoryWarning.SetActive(false);
+        }
     }
     public void SetPossibleToolsGain()
     {
-        int minCraftGain = playerInventory.CalcCraftingGain(minCraftingTools);
-        int maxCraftGain = playerInventory.CalcCraftingGain(maxCraftingTools);
+        minCraftingGain = playerInventory.CalcCraftingGain(minCraftingTools);
+        maxCraftingGain = playerInventory.CalcCraftingGain(maxCraftingTools);
 
-        GameObject.Find("CraftPossibleGain").GetComponent<Text>().text = "+" + minCraftGain.ToString() + "-" + maxCraftGain.ToString();
+        GameObject.Find("CraftPossibleGain").GetComponent<Text>().text = "+" + minCraftingGain.ToString() + "-" + maxCraftingGain.ToString();
+        if (playerInventory.currentInventory + maxCraftingGain - playerInventory.CalcFoodPerTurn() > playerInventory.maxInventory)
+        {
+            ToolsInventoryWarning.SetActive(true);
+        }
+        else
+        {
+            ToolsInventoryWarning.SetActive(false);
+        }
     }
     public void SetPossibleGainValues()
     {

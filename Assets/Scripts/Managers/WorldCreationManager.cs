@@ -19,8 +19,8 @@ public class WorldCreationManager : MonoBehaviour
     int tilesInHeight;
 
     public GameObject homeland;
-    public float tileChance = 10;
-    public float homelandTileChance = 30;
+    public float tileChance;
+    public float homelandTileChance;
 
     Collider2D positionRefCollider;
     Collider2D homelandCollider;
@@ -133,14 +133,14 @@ public class WorldCreationManager : MonoBehaviour
         int roll = r.Next(100);
         bool withinHomelandRange = isWithinHomelandRange();
 
-        if (withinHomelandRange)
+        /*if (withinHomelandRange)
         {
             GenerateTile(roll, homelandTileChance);
         }
         else
-        {
+        {*/
             GenerateTile(roll, tileChance);
-        }
+        //}
     }
 
     bool isWithinHomelandRange() //Checks whether the ref collider is currently within range of the homeland area
@@ -159,6 +159,7 @@ public class WorldCreationManager : MonoBehaviour
     {
         if (chance <= spawnChance)
         {
+            Debug.Log("Chance was " + chance + ", spawnChance was " + spawnChance + "   Generating tile");
             //Debug.Log("Rolled within random range, attempting to create tile");
             GameObject tileToCreate = tileManager.randomiseTileType(); //Picks a tile type to place based on weights
             if (tileToCreate == null)

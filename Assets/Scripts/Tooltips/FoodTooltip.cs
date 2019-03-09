@@ -20,7 +20,7 @@ public class FoodTooltip : MonoBehaviour
     {
         tooltip.SetActive(true);
         weightPer.text = playerInventory.foodSize.ToString();
-        lossPerTurn.text = playerInventory.CalcFoodPerTurn(playerInventory.foodPerTurn).ToString();
+        lossPerTurn.text = playerInventory.CalcFoodPerTurn().ToString();
         totalWeight.text = playerInventory.foodSpace.ToString();
     }
     

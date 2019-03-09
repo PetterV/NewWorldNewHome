@@ -36,7 +36,7 @@ public class InventoryPanel : MonoBehaviour
         currentInventory.text = playerInventory.currentInventory.ToString();
         currentFood.text = playerInventory.currentFood.ToString();
         foodSpace.text = "(" + playerInventory.foodSpace.ToString() + ")";
-        foodPerTurn.text = "Per turn: -" + playerInventory.CalcFoodPerTurn(playerInventory.foodPerTurn).ToString();
+        foodPerTurn.text = "Per turn: -" + playerInventory.CalcFoodPerTurn().ToString();
         currentWood.text = playerInventory.currentWood.ToString();
         woodSpace.text = "(" + playerInventory.woodSpace.ToString() + ")";
         woodPerTurn.text = "Per turn: -" + playerInventory.CalcWoodPerTurn(playerInventory.woodPerTurn).ToString();
