@@ -50,7 +50,7 @@ public class GameController : MonoBehaviour
             {
                 UnPause();
             }
-            else
+            else if (!isPaused)
             {
                 Pause(false);
             }
@@ -61,6 +61,7 @@ public class GameController : MonoBehaviour
     {
         pauseBoard.SetActive(true);
         isPaused = true;
+        pausedByEvent = fromEvent;
     }
 
     public void UnPause()

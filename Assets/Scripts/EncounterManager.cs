@@ -17,12 +17,14 @@ public class EncounterManager : MonoBehaviour
     {
         gameController = GameObject.Find("GameController").GetComponent<GameController>();
         playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
-        EncounterSetup("ExampleEncounter");
+        EncounterSetup("TutorialEncounter");
     }
 
     public void EncounterSetup(string encounterName)
     {
+        Debug.Log("Trying to set up encounter " + encounterName);
         gameController.Pause(true);
+        Debug.Log("Successfully paused");
         foreach (GameObject encounter in encounters)
         {
             if (encounter.name == encounterName)
@@ -35,8 +37,8 @@ public class EncounterManager : MonoBehaviour
 
     public void CloseEncounter()
     {
-        gameController.UnPause();
         activeEncounter.SetActive(false);
+        gameController.UnPause();
     }
 
     public void OptionEffect (GameObject effectValues)
@@ -46,7 +48,7 @@ public class EncounterManager : MonoBehaviour
             string gainOrLose = effectValues.GetComponent<OptionEffectValues>().gainOrLose;
             string resource = effectValues.GetComponent<OptionEffectValues>().resource;
             float value = effectValues.GetComponent<OptionEffectValues>().value;
-
+            
             if (gainOrLose == "gain")
             {
                 if (resource == "food")
@@ -108,6 +110,7 @@ public class EncounterManager : MonoBehaviour
                 Debug.LogError("gainOrLose needs to be either 'gain' or 'lose'");
             }
         }
+
         else
         {
             Debug.Log("Option Button had no effect assigned");

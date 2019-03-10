@@ -33,7 +33,7 @@ public class Encounter : MonoBehaviour
 
     public bool hasFired = false;
 
-    EncounterManager encounterManager;
+    public EncounterManager encounterManager;
 
     public void ActivateEncounter()
     {

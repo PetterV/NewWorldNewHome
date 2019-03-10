@@ -7,7 +7,6 @@ public class ValueChangeTooltip : MonoBehaviour
 {
     public GameObject goodGainLabel; //The "labels" are the tooltips appearing, but I'm sick and my brain is no good for naming things right now
     public GameObject badGainLabel;
-    bool justActivated = false;
 
     public void Activate(int value, string change)
     {
